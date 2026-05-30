@@ -1066,40 +1066,53 @@ function BTS() {
   const vpRef = React.useRef(null);
   const pause = React.useRef(false);
   const touchRef = React.useRef(false);
+  const secRef = React.useRef(null);
+  const onScreen = React.useRef(false);
   React.useEffect(() => {
     touchRef.current = !!(window.matchMedia && window.matchMedia("(hover: none)").matches);
   }, []);
   React.useEffect(() => {
-    const vp = vpRef.current;
+    const vp = vpRef.current, sec = secRef.current;
     if (!vp) return;
+    let io;
+    if (sec && "IntersectionObserver" in window) {
+      io = new IntersectionObserver((es) => {
+        onScreen.current = es[0].isIntersecting;
+        if (!es[0].isIntersecting) vp.scrollLeft = 0;
+      }, { rootMargin: "120px" });
+      io.observe(sec);
+    } else {
+      onScreen.current = true;
+    }
     let raf, f = 0, mid = null;
     const step = () => {
-      if (!pause.current) {
-        vp.scrollLeft += 1.2;
-        const half = vp.scrollWidth / 2;
-        if (half > 0 && vp.scrollLeft >= half) vp.scrollLeft -= half;
+      if (onScreen.current && !pause.current) {
+        const max = vp.scrollWidth - vp.clientWidth;
+        if (vp.scrollLeft < max - 1) vp.scrollLeft += 1.2;
       }
       if (touchRef.current && f++ % 4 === 0) {
-        const cx = window.innerWidth / 2;
-        let best = null, bestD = Infinity;
-        vp.querySelectorAll(".bts-item").forEach((el) => {
-          const r = el.getBoundingClientRect();
-          const d = Math.abs((r.left + r.right) / 2 - cx);
-          if (d < bestD) {
-            bestD = d;
-            best = el;
+        const els = vp.querySelectorAll(".bts-item");
+        if (els.length > 1) {
+          const vpR = vp.getBoundingClientRect(), r0 = els[0].getBoundingClientRect();
+          const pitch = els[1].getBoundingClientRect().left - r0.left || 1;
+          const item0 = r0.left - vpR.left + vp.scrollLeft;
+          let k = Math.round((vp.scrollLeft + vp.clientWidth / 2 - item0 - r0.width / 2) / pitch);
+          k = Math.max(0, Math.min(els.length - 1, k));
+          const best = els[k];
+          if (best !== mid) {
+            if (mid) mid.classList.remove("mid");
+            if (best) best.classList.add("mid");
+            mid = best;
           }
-        });
-        if (best !== mid) {
-          if (mid) mid.classList.remove("mid");
-          if (best) best.classList.add("mid");
-          mid = best;
         }
       }
       raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      if (io) io.disconnect();
+    };
   }, []);
   const touchPause = () => {
     pause.current = true;
@@ -1109,8 +1122,9 @@ function BTS() {
       pause.current = false;
     }, 1500);
   };
-  const items = [...WF.bts, ...WF.bts];
-  return /* @__PURE__ */ React.createElement("section", { id: "bts", style: { paddingTop: "clamp(50px,7vw,110px)", paddingBottom: "clamp(46px,6vw,90px)", overflow: "hidden", borderTop: "1px solid var(--line-light)" } }, /* @__PURE__ */ React.createElement("style", null, `
+  const items = [];
+  for (let r = 0; r < 10; r++) items.push.apply(items, WF.bts);
+  return /* @__PURE__ */ React.createElement("section", { id: "bts", ref: secRef, style: { paddingTop: "clamp(50px,7vw,110px)", paddingBottom: "clamp(46px,6vw,90px)", overflow: "hidden", borderTop: "1px solid var(--line-light)" } }, /* @__PURE__ */ React.createElement("style", null, `
         .bts-vp{overflow:hidden;width:100%;scrollbar-width:none;}
         .bts-vp::-webkit-scrollbar{display:none;}
         @media(hover:none){.bts-vp{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;}}
