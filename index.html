@@ -1206,7 +1206,11 @@ function RnD() {
         @media(max-width:680px){.ah-strip{height:auto;}.ah-row{position:static;flex-direction:column;}
           .ah-col{flex:0 0 auto;height:84px;border-left:none;border-top:1px solid rgba(244,239,225,.22);}
           .ah-col.open{flex:0 0 auto;height:clamp(260px,70vw,340px);} .ah-bg{display:none;}
-          .ah-col:not(.open) .ah-img{opacity:.55;} .ah-txt span{writing-mode:horizontal-tb;transform:none;}}
+          /* mobile: behave like the Styles accordion — video always visible, no
+             opacity/fade-to-black; grayscale when closed, colour when open. */
+          .ah-img{opacity:1;animation:none;filter:grayscale(.55) brightness(.5);transition:filter .55s;}
+          .ah-col.open .ah-img{opacity:1;animation:none;filter:none;}
+          .ah-txt span{writing-mode:horizontal-tb;transform:none;}}
       `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { className: "ah-head" }, /* @__PURE__ */ React.createElement("span", null, "[ 07 ] After hours — self-initiated"), /* @__PURE__ */ React.createElement("span", null, "Made for the love of the craft")), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(48px,12vw,210px)", lineHeight: 0.82, marginTop: "clamp(8px,1.2vw,16px)" } }, "AFTER ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "HOURS.")), /* @__PURE__ */ React.createElement("p", { style: { marginTop: "clamp(10px,1.5vw,18px)", fontWeight: 700, fontSize: "clamp(16px,1.9vw,28px)", letterSpacing: "-.01em" } }, "No brief. No client. ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "Just because.")), /* @__PURE__ */ React.createElement("div", { className: "ah-strip" }, /* @__PURE__ */ React.createElement("img", { className: "ah-bg", src: prev, alt: "", "aria-hidden": "true", decoding: "async" }), /* @__PURE__ */ React.createElement("img", { key: bg, className: "ah-bg", src: bg, alt: "", "aria-hidden": "true", decoding: "async", style: { animation: "ahbg .8s ease" } }), /* @__PURE__ */ React.createElement("div", { className: "ah-row" }, order.map((e, idx) => /* @__PURE__ */ React.createElement("div", { key: idx, className: "ah-col exp" + (idx === sel ? " open" : ""), onMouseEnter: () => setSel(idx), onClick: () => {
     if (noHover) setSel(idx);
     else open(e);
