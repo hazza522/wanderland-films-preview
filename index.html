@@ -643,7 +643,7 @@ function FeaturedCarousel() {
         .fl-meta-in>*:nth-child(2){animation-delay:.1s;}
         .fl-meta-in>*:nth-child(3){animation-delay:.18s;}
         @keyframes flrise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-      `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(28px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 01 ]"), " Selected projects"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "FEATURED")), /* @__PURE__ */ React.createElement("span", { className: "mono", style: { fontSize: 12, letterSpacing: ".16em", color: "var(--mut-light)", paddingBottom: 10 } }, String(cur + 1).padStart(2, "0"), " / ", String(WF.featured.length).padStart(2, "0"))), /* @__PURE__ */ React.createElement("div", { className: "fl-lead", onClick: open }, WF.featured.map((f, i) => /* @__PURE__ */ React.createElement(VideoMedia, { key: i, className: i === cur ? "on" : "", active: i === cur, src: f.v.src, poster: f.v.poster })), /* @__PURE__ */ React.createElement("div", { className: "fl-scrim" }), /* @__PURE__ */ React.createElement("div", { className: "fl-no" }, p.n), /* @__PURE__ */ React.createElement("div", { className: "fl-meta" }, /* @__PURE__ */ React.createElement("div", { key: cur, className: "fl-meta-in" }, /* @__PURE__ */ React.createElement("div", { className: "fl-cat" }, p.cat), /* @__PURE__ */ React.createElement("div", { className: "fl-client" }, p.client), /* @__PURE__ */ React.createElement("div", { className: "fl-sub" }, "“", p.title, "” — ", p.blurb)))), /* @__PURE__ */ React.createElement("div", { className: "fl-thumbs" }, WF.featured.map((f, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "fl-thumb" + (i === cur ? " active" : ""), onClick: () => setCur(i), onMouseEnter: () => setCur(i) }, /* @__PURE__ */ React.createElement("img", { src: f.v.poster, alt: f.client, loading: "lazy", decoding: "async" }), /* @__PURE__ */ React.createElement("span", { className: "tn" }, f.n))))));
+      `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(28px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 01 ]"), " Selected projects"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "FEATURED")), /* @__PURE__ */ React.createElement("span", { className: "mono", style: { fontSize: 12, letterSpacing: ".16em", color: "var(--mut-light)", paddingBottom: 10 } }, String(cur + 1).padStart(2, "0"), " / ", String(WF.featured.length).padStart(2, "0"))), /* @__PURE__ */ React.createElement("div", { className: "fl-lead", onClick: open }, WF.featured.map((f, i) => /* @__PURE__ */ React.createElement(VideoMedia, { key: i, className: i === cur ? "on" : "", active: i === cur, src: f.v.src, poster: f.v.poster })), /* @__PURE__ */ React.createElement("div", { className: "fl-scrim" }), /* @__PURE__ */ React.createElement("div", { className: "fl-no" }, p.n), /* @__PURE__ */ React.createElement("div", { className: "fl-meta" }, /* @__PURE__ */ React.createElement("div", { key: cur, className: "fl-meta-in" }, /* @__PURE__ */ React.createElement("div", { className: "fl-cat" }, p.cat), /* @__PURE__ */ React.createElement("div", { className: "fl-client" }, p.client), /* @__PURE__ */ React.createElement("div", { className: "fl-sub" }, "“", p.title, "”", p.blurb ? " — " + p.blurb : "")))), /* @__PURE__ */ React.createElement("div", { className: "fl-thumbs" }, WF.featured.map((f, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "fl-thumb" + (i === cur ? " active" : ""), onClick: () => setCur(i), onMouseEnter: () => setCur(i) }, /* @__PURE__ */ React.createElement("img", { src: f.v.poster, alt: f.client, loading: "lazy", decoding: "async" }), /* @__PURE__ */ React.createElement("span", { className: "tn" }, f.n))))));
 }
 Object.assign(window, { Nav, Hero, FeaturedCarousel });
 const { useState, useRef } = React;
@@ -1197,11 +1197,21 @@ function Gallery() {
   const pool = [...WF.gallery, ...WF.gallery];
   const [count, setCount] = React.useState(12);
   const [hov, setHov] = React.useState(-1);
+  const [cols, setCols] = React.useState(3);
   const [noHover, setNoHover] = React.useState(false);
   const [central, setCentral] = React.useState(0);
   const gridRef = React.useRef(null);
   React.useEffect(() => {
     setNoHover(!!(window.matchMedia && window.matchMedia("(hover: none)").matches));
+  }, []);
+  React.useEffect(() => {
+    const calc = () => {
+      const w = window.innerWidth;
+      setCols(w <= 560 ? 1 : w <= 900 ? 2 : 3);
+    };
+    calc();
+    window.addEventListener("resize", calc, { passive: true });
+    return () => window.removeEventListener("resize", calc);
   }, []);
   React.useEffect(() => {
     if (!noHover) return;
@@ -1213,13 +1223,13 @@ function Gallery() {
       const items = grid.querySelectorAll(".gal-item");
       const cy = window.innerHeight / 2;
       let best = -1, bestD = Infinity;
-      items.forEach((el, idx) => {
+      items.forEach((el) => {
         const r = el.getBoundingClientRect();
         if (r.bottom < 0 || r.top > window.innerHeight) return;
         const d = Math.abs((r.top + r.bottom) / 2 - cy);
         if (d < bestD) {
           bestD = d;
-          best = idx;
+          best = +el.dataset.i;
         }
       });
       if (best >= 0) setCentral(best);
@@ -1235,17 +1245,27 @@ function Gallery() {
       window.removeEventListener("resize", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [noHover, count]);
+  }, [noHover, count, cols]);
+  const shown = pool.slice(0, count);
+  const columns = Array.from({ length: cols }, () => []);
+  const colH = new Array(cols).fill(0);
+  shown.forEach((g, i) => {
+    const m = String(g[1]).split("/");
+    const rh = m.length === 2 && +m[0] ? +m[1] / +m[0] : 0.66;
+    let c = 0;
+    for (let k = 1; k < cols; k++) if (colH[k] < colH[c]) c = k;
+    columns[c].push([g, i]);
+    colH[c] += rh + 0.14;
+  });
   return /* @__PURE__ */ React.createElement("section", { id: "gallery", style: { background: "var(--dark)", color: "var(--paper)", paddingTop: "clamp(50px,7vw,110px)", paddingBottom: "clamp(50px,7vw,110px)" } }, /* @__PURE__ */ React.createElement("style", null, `
-        .gal-grid{column-count:3;column-gap:clamp(12px,1.4vw,22px);}
-        @media(max-width:900px){.gal-grid{column-count:2;}}
-        @media(max-width:560px){.gal-grid{column-count:1;}}
-        .gal-item{break-inside:avoid;margin-bottom:clamp(12px,1.4vw,22px);position:relative;overflow:hidden;display:block;cursor:pointer;}
+        .gal-grid{display:flex;gap:clamp(12px,1.4vw,22px);align-items:flex-start;}
+        .gal-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:clamp(12px,1.4vw,22px);}
+        .gal-item{position:relative;overflow:hidden;display:block;cursor:pointer;}
         .gal-item img,.gal-item video{width:100%;display:block;filter:saturate(.92) brightness(.92);transition:filter .5s;}
         .gal-item:hover img,.gal-item:hover video{filter:saturate(1.05) brightness(1.04);}
         .gal-cap{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:10.5px;
           letter-spacing:.1em;color:var(--mut-dark);text-transform:uppercase;margin-top:8px;}
-      `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(28px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "GALLERY"), /* @__PURE__ */ React.createElement("span", { className: "mono", style: { fontSize: "clamp(11px,1vw,13px)", letterSpacing: ".18em", color: "var(--mut-dark)", textTransform: "uppercase", paddingBottom: 10 } }, "Selected frames")), /* @__PURE__ */ React.createElement("div", { className: "gal-grid", ref: gridRef }, pool.slice(0, count).map((g, i) => /* @__PURE__ */ React.createElement("div", { key: i }, /* @__PURE__ */ React.createElement("div", { className: "gal-item", role: "button", onMouseEnter: () => setHov(i), onMouseLeave: () => setHov(-1), onClick: () => window.openModal({ client: g[3], cat: "Frame", hero: g[4] }) }, /* @__PURE__ */ React.createElement(VideoMedia, { active: noHover ? central === i : hov === i, src: g[0], poster: g[4], style: { aspectRatio: g[1], objectFit: "cover" } })), /* @__PURE__ */ React.createElement("div", { className: "gal-cap" }, /* @__PURE__ */ React.createElement("span", { className: "red" }, String(i % WF.gallery.length + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("span", null, g[3]))))), count < pool.length && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "center", marginTop: "clamp(30px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("button", { onClick: () => setCount((c) => Math.min(c + 6, pool.length)), className: "mono", style: { cursor: "pointer", background: "transparent", color: "var(--paper)", border: "1px solid rgba(244,241,232,.4)", padding: "15px 30px", fontSize: 12, letterSpacing: ".18em", textTransform: "uppercase" } }, "Load more ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "+")))));
+      `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(28px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "GALLERY"), /* @__PURE__ */ React.createElement("span", { className: "mono", style: { fontSize: "clamp(11px,1vw,13px)", letterSpacing: ".18em", color: "var(--mut-dark)", textTransform: "uppercase", paddingBottom: 10 } }, "Selected frames")), /* @__PURE__ */ React.createElement("div", { className: "gal-grid", ref: gridRef }, columns.map((col, ci) => /* @__PURE__ */ React.createElement("div", { className: "gal-col", key: ci }, col.map(([g, i]) => /* @__PURE__ */ React.createElement("div", { key: i }, /* @__PURE__ */ React.createElement("div", { className: "gal-item", "data-i": i, role: "button", onMouseEnter: () => setHov(i), onMouseLeave: () => setHov(-1), onClick: () => window.openModal({ client: g[3], cat: "Frame", hero: g[4] }) }, /* @__PURE__ */ React.createElement(VideoMedia, { active: noHover ? central === i : hov === i, src: g[0], poster: g[4], style: { aspectRatio: g[1], objectFit: "cover" } })), /* @__PURE__ */ React.createElement("div", { className: "gal-cap" }, /* @__PURE__ */ React.createElement("span", { className: "red" }, String(i % WF.gallery.length + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("span", null, g[3]))))))), count < pool.length && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "center", marginTop: "clamp(30px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("button", { onClick: () => setCount((c) => Math.min(c + 6, pool.length)), className: "mono", style: { cursor: "pointer", background: "transparent", color: "var(--paper)", border: "1px solid rgba(244,241,232,.4)", padding: "15px 30px", fontSize: 12, letterSpacing: ".18em", textTransform: "uppercase" } }, "Load more ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "+")))));
 }
 function Contact() {
   const [copied, setCopied] = React.useState(false);
