@@ -603,6 +603,16 @@ window.WF.vid = function(i) {
   var a = window.WF.videos, n = a.length, s = a[(i % n + n) % n];
   return { src: s, poster: s.replace(/\.mp4$/, ".jpg") };
 };
+try {
+  window.WF.videos.forEach(function(s) {
+    var l = document.createElement("link");
+    l.rel = "preload";
+    l.as = "image";
+    l.href = s.replace(/\.mp4$/, ".jpg");
+    (document.head || document.documentElement).appendChild(l);
+  });
+} catch (e) {
+}
 function Nav() {
   const items = ["Featured", "Styles", "Process", "BTS", "R&D", "Gallery", "Contact"];
   const ids = ["featured", "styles", "beforeafter", "bts", "rnd", "gallery", "contact"];
@@ -779,24 +789,53 @@ function BeforeAfter() {
       }
       return;
     }
-    try {
-      f.currentTime = 0;
-      b.currentTime = 0;
-    } catch (e) {
-    }
-    [f.play(), b.play()].forEach((pp) => {
-      if (pp && pp.catch) pp.catch(() => {
-      });
-    });
-    const id = setInterval(() => {
-      if (Math.abs(b.currentTime - f.currentTime) > 0.06) {
+    [f, b].forEach((v) => {
+      if (v.preload !== "auto") v.preload = "auto";
+      if (v.readyState === 0) {
         try {
-          b.currentTime = f.currentTime;
+          v.load();
         } catch (e) {
         }
       }
-    }, 500);
-    return () => clearInterval(id);
+    });
+    let done = false, id = 0;
+    const go = () => {
+      if (done) return;
+      try {
+        f.currentTime = 0;
+        b.currentTime = 0;
+      } catch (e) {
+      }
+      [f.play(), b.play()].forEach((pp) => {
+        if (pp && pp.catch) pp.catch(() => {
+        });
+      });
+      id = setInterval(() => {
+        if (Math.abs(b.currentTime - f.currentTime) > 0.06) {
+          try {
+            b.currentTime = f.currentTime;
+          } catch (e) {
+          }
+        }
+      }, 500);
+    };
+    if (f.readyState >= 2) {
+      go();
+      return () => {
+        done = true;
+        if (id) clearInterval(id);
+      };
+    }
+    const onReady = () => {
+      f.removeEventListener("loadeddata", onReady);
+      go();
+    };
+    f.addEventListener("loadeddata", onReady);
+    return () => {
+      done = true;
+      f.removeEventListener("loadeddata", onReady);
+      if (id) clearInterval(id);
+    };
   }, [cur, visible]);
   React.useEffect(() => {
     let raf = 0, last = null;
@@ -1077,25 +1116,63 @@ function VideoMedia({ src, poster, active, hover, className, style }) {
       setNear(true);
       return;
     }
-    const io = new IntersectionObserver((es) => setNear(es[0].isIntersecting), { rootMargin: "150px" });
+    const io = new IntersectionObserver((es) => setNear(es[0].isIntersecting), { rootMargin: "300px" });
     io.observe(v);
     return () => io.disconnect();
   }, []);
+  React.useEffect(() => {
+    const v = ref.current;
+    if (!v || !near) return;
+    if (v.preload !== "auto") v.preload = "auto";
+    if (v.readyState === 0) {
+      try {
+        v.load();
+      } catch (e) {
+      }
+    }
+  }, [near]);
   const playing = near && (active || hover && hovered);
   React.useEffect(() => {
     const v = ref.current;
     if (!v) return;
-    if (playing) {
-      const p = v.play();
-      if (p && p.catch) p.catch(() => {
-      });
-    } else {
+    if (!playing) {
       try {
         v.pause();
         v.currentTime = 0;
       } catch (e) {
       }
+      return;
     }
+    let done = false;
+    const go = () => {
+      if (!done) {
+        const p = v.play();
+        if (p && p.catch) p.catch(() => {
+        });
+      }
+    };
+    if (v.readyState >= 2) {
+      go();
+      return () => {
+        done = true;
+      };
+    }
+    const onReady = () => {
+      v.removeEventListener("loadeddata", onReady);
+      go();
+    };
+    v.addEventListener("loadeddata", onReady);
+    if (v.preload !== "auto") v.preload = "auto";
+    if (v.readyState === 0) {
+      try {
+        v.load();
+      } catch (e) {
+      }
+    }
+    return () => {
+      done = true;
+      v.removeEventListener("loadeddata", onReady);
+    };
   }, [playing]);
   return /* @__PURE__ */ React.createElement(
     "video",
@@ -1131,20 +1208,55 @@ function VideoReel() {
   React.useEffect(() => {
     const v = refs.current[idx];
     if (!v) return;
-    if (visible) {
+    const nxt = refs.current[(idx + 1) % vids.length];
+    if (nxt && nxt.preload !== "auto") {
+      nxt.preload = "auto";
       try {
-        v.currentTime = 0;
+        nxt.load();
       } catch (e) {
       }
-      const p = v.play();
-      if (p && p.catch) p.catch(() => {
-      });
-    } else {
+    }
+    if (!visible) {
       try {
         v.pause();
       } catch (e) {
       }
+      return;
     }
+    let done = false;
+    const go = () => {
+      if (!done) {
+        try {
+          v.currentTime = 0;
+        } catch (e) {
+        }
+        const p = v.play();
+        if (p && p.catch) p.catch(() => {
+        });
+      }
+    };
+    if (v.readyState >= 2) {
+      go();
+      return () => {
+        done = true;
+      };
+    }
+    const onReady = () => {
+      v.removeEventListener("loadeddata", onReady);
+      go();
+    };
+    v.addEventListener("loadeddata", onReady);
+    if (v.preload !== "auto") v.preload = "auto";
+    if (v.readyState === 0) {
+      try {
+        v.load();
+      } catch (e) {
+      }
+    }
+    return () => {
+      done = true;
+      v.removeEventListener("loadeddata", onReady);
+    };
   }, [idx, visible]);
   return /* @__PURE__ */ React.createElement("div", { ref: wrapRef, style: { position: "absolute", inset: 0 } }, vids.map((src, i) => /* @__PURE__ */ React.createElement(
     "video",
