@@ -418,12 +418,16 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
   }
   function fb(seed) {
     var s = FALLBACK[hash(seed) % FALLBACK.length];
-    return { src: s, poster: s.replace(/\.mp4$/, ".jpg") };
+    return { src: s, poster: s.replace(/\.mp4$/, ".jpg"), real: false };
+  }
+  function fbAt(i) {
+    var s = FALLBACK[(i % FALLBACK.length + FALLBACK.length) % FALLBACK.length];
+    return { src: s, poster: s.replace(/\.mp4$/, ".jpg"), real: false };
   }
   function clipFrom(resMap, poster, seed) {
     if (resMap) {
       for (var i = 0; i < RES.length; i++) {
-        if (resMap[RES[i]]) return { src: resMap[RES[i]], poster: poster || "" };
+        if (resMap[RES[i]]) return { src: resMap[RES[i]], poster: poster || "", real: true };
       }
     }
     return fb(seed);
@@ -511,12 +515,24 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
       if (p.brand && brands.indexOf(p.brand) < 0) brands.push(p.brand);
     });
     WF2.clients50 = brands.length ? brands : ["Wanderland Films"];
+    var AHN = 6;
     var ah = L("After Hours");
-    if (!ah.length) ah = take(hub, 4);
-    WF2.rnd = ah.map(function(x) {
-      var p = x.p, e = x.e;
-      return { tag: (e.label || "R&D").toUpperCase(), title: nm(p), desc: e.caption || p.summary || p.notes || "", v: clipOf(p, 0) };
+    var ahSeen = {};
+    ah.forEach(function(x) {
+      ahSeen[x.p.id] = 1;
     });
+    var ahMore = (hub.projects || []).filter(function(p) {
+      return !ahSeen[p.id];
+    });
+    var ahRows = ah.slice();
+    for (var ak = 0; ahRows.length < AHN && ak < ahMore.length; ak++) ahRows.push({ e: {}, p: ahMore[ak] });
+    ahRows = ahRows.slice(0, AHN);
+    WF2.rnd = ahRows.map(function(x, i) {
+      var p = x.p, e = x.e, c = clipOf(p, 0);
+      if (!c.real) c = fbAt(i);
+      return { tag: (e.label || "R&D").toUpperCase(), title: nm(p), desc: e.caption || p.summary || p.notes || "", v: c };
+    });
+    for (var az = WF2.rnd.length; az < AHN; az++) WF2.rnd.push({ tag: "R&D", title: "Experiment " + String(az + 1).padStart(2, "0"), desc: "", v: fbAt(az) });
     var gal = L("Gallery");
     if (!gal.length) gal = take(hub, 12);
     var asp = ["16/9", "16/9", "21/9", "16/9", "3/2", "16/9", "4/3", "16/9", "16/9", "16/9", "16/9", "16/9", "3/2", "3/2", "2/1"];
