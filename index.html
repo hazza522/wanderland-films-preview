@@ -1065,22 +1065,21 @@ function copyToClipboard(text) {
 function BTS() {
   const vpRef = React.useRef(null);
   const pause = React.useRef(false);
-  const [noHover, setNoHover] = React.useState(false);
+  const touchRef = React.useRef(false);
   React.useEffect(() => {
-    setNoHover(!!(window.matchMedia && window.matchMedia("(hover: none)").matches));
+    touchRef.current = !!(window.matchMedia && window.matchMedia("(hover: none)").matches);
   }, []);
   React.useEffect(() => {
     const vp = vpRef.current;
     if (!vp) return;
     let raf, f = 0, mid = null;
-    const touch = noHover;
     const step = () => {
       if (!pause.current) {
         vp.scrollLeft += 1.2;
         const half = vp.scrollWidth / 2;
         if (half > 0 && vp.scrollLeft >= half) vp.scrollLeft -= half;
       }
-      if (touch && f++ % 4 === 0) {
+      if (touchRef.current && f++ % 4 === 0) {
         const cx = window.innerWidth / 2;
         let best = null, bestD = Infinity;
         vp.querySelectorAll(".bts-item").forEach((el) => {
@@ -1101,7 +1100,7 @@ function BTS() {
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [noHover]);
+  }, []);
   const touchPause = () => {
     pause.current = true;
   };
@@ -1112,8 +1111,9 @@ function BTS() {
   };
   const items = [...WF.bts, ...WF.bts];
   return /* @__PURE__ */ React.createElement("section", { id: "bts", style: { paddingTop: "clamp(50px,7vw,110px)", paddingBottom: "clamp(46px,6vw,90px)", overflow: "hidden", borderTop: "1px solid var(--line-light)" } }, /* @__PURE__ */ React.createElement("style", null, `
-        .bts-vp{overflow-x:auto;overflow-y:hidden;width:100%;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+        .bts-vp{overflow:hidden;width:100%;scrollbar-width:none;}
         .bts-vp::-webkit-scrollbar{display:none;}
+        @media(hover:none){.bts-vp{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;}}
         .bts-track{display:flex;align-items:flex-end;gap:clamp(12px,1.6vw,22px);height:clamp(360px,54vh,580px);width:max-content;}
         .bts-item{flex:0 0 auto;position:relative;overflow:hidden;width:clamp(190px,20vw,300px);
           box-shadow:inset 0 0 0 1px rgba(244,241,232,.32);
