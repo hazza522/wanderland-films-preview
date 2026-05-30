@@ -399,220 +399,186 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
 
 <!-- Wanderland Films app: 5 design parts, JSX pre-compiled by esbuild, one shared scope -->
 <script>
-window.WF = {
-  // FEATURED — horizontal carousel
-  featured: [
-    {
-      n: "01",
-      client: "Bring Me The Horizon",
-      title: "10 Statues",
-      cat: "Music Video",
-      year: "2024",
-      role: "CG Environment · FX · Comp",
-      img: "assets/bmth-arena.webp",
-      blurb: "A suspended-rider crowd cathedral built from scratch — full CG arena, volumetric haze and a sea of digi-doubles."
-    },
-    {
-      n: "02",
-      client: "scarlxrd",
-      title: "777",
-      cat: "Music Video",
-      year: "2024",
-      role: "Environment · Sim · Comp",
-      img: "assets/scarlxrd-fall.webp",
-      blurb: "A burning descent at golden hour — cloth sim, fire FX and a fully digital sky to sell the fall."
-    },
-    {
-      n: "03",
-      client: "Royal Enfield",
-      title: "Built For Cities",
-      cat: "Commercial",
-      year: "2024",
-      role: "Set Ext · Cleanup · Grade",
-      img: "assets/royal-enfield.webp",
-      blurb: "Speed at altitude. Set extensions, sky replacement and invisible rig removal that let the stunt breathe."
-    },
-    {
-      n: "04",
-      client: "Marina Raphael",
-      title: "Concrete Mirage",
-      cat: "Fashion Film",
-      year: "2025",
-      role: "CG City · Projection · Comp",
-      img: "assets/marina-raphael.webp",
-      blurb: "A model held inside a mirrored metropolis — billboards, glass and grid woven into one impossible frame."
-    },
-    {
-      n: "05",
-      client: "Mika",
-      title: "Excuses For Love",
-      cat: "Music Video",
-      year: "2024",
-      role: "FX · Comp · Cleanup",
-      img: "assets/mika.webp",
-      blurb: "Fireworks, a marching band and a lighthouse — practical and CG pyro blended into a single night sky."
-    },
-    {
-      n: "06",
-      client: "EA Sports",
-      title: "First Touch",
-      cat: "Commercial",
-      year: "2025",
-      role: "CG FX · Look-Dev · Comp",
-      img: "assets/fifa.webp",
-      blurb: "A matchball caught mid-transformation — refractive energy and macro detail, art-directed frame by frame."
+(function() {
+  var RES = ["720", "480", "360", "280"];
+  var FALLBACK = [
+    "assets/videos/bmth.mp4",
+    "assets/videos/invergex.mp4",
+    "assets/videos/fifa.mp4",
+    "assets/videos/marina.mp4",
+    "assets/videos/sennheiser.mp4",
+    "assets/videos/tenpin.mp4"
+  ];
+  var WF2 = window.WF = { fallback: FALLBACK };
+  function hash(s) {
+    var h = 0;
+    s = String(s || "");
+    for (var i = 0; i < s.length; i++) h = h * 31 + s.charCodeAt(i) | 0;
+    return Math.abs(h);
+  }
+  function fb(seed) {
+    var s = FALLBACK[hash(seed) % FALLBACK.length];
+    return { src: s, poster: s.replace(/\.mp4$/, ".jpg") };
+  }
+  function clipFrom(resMap, poster, seed) {
+    if (resMap) {
+      for (var i = 0; i < RES.length; i++) {
+        if (resMap[RES[i]]) return { src: resMap[RES[i]], poster: poster || "" };
+      }
     }
-  ],
-  // BEFORE / AFTER — cycle through pairs (graded final vs raw plate via filter)
-  ba: [
-    { img: "assets/royal-enfield.webp", client: "Royal Enfield", note: "Sky replacement · rig removal · grade" },
-    { img: "assets/marina-raphael.webp", client: "Marina Raphael", note: "CG city · projection · comp" },
-    { img: "assets/bmth-arena.webp", client: "Bring Me The Horizon", note: "Full CG arena · crowd · grade" },
-    { img: "assets/mika.webp", client: "Mika", note: "Pyro FX · sky · cleanup" },
-    { img: "assets/scarlxrd-fall.webp", client: "scarlxrd", note: "CG sky · cloth sim · grade" }
-  ],
-  // STYLES — accordion
-  styles: [
-    { k: "01", name: "SANDBOX", desc: "Open CG worlds you can get lost in", img: "assets/bmth-ruins.webp" },
-    { k: "02", name: "SIDE-SCROLLER", desc: "Flat-depth, side-on cinematic staging", img: "assets/scarlxrd-casino.webp" },
-    { k: "03", name: "PIXEL ART", desc: "Lo-fi grids, CRT glow & dither", img: "assets/hypeman.webp" },
-    { k: "04", name: "2.5D", desc: "Parallax layers, painted depth", img: "assets/choose-fighter.webp" },
-    { k: "05", name: "MACRO", desc: "Product-grade detail, every micron", img: "assets/sennheiser.webp" },
-    { k: "06", name: "PHOTOREAL", desc: "You will not find the seam", img: "assets/disappear.webp" }
-  ],
-  // BTS — bottom-aligned staggered scroll [src, heightRatio(0-1), index, caption]
-  bts: [
-    ["assets/bmth-rave.webp", 0.62, "31", "BMTH — rave plate"],
-    ["assets/disappear.webp", 0.42, "29", "Disappear — set"],
-    ["assets/elevate.webp", 0.78, "24", "Elevate — capture"],
-    ["assets/choose-fighter.webp", 0.55, "18", "Choose Your Fighter"],
-    ["assets/tenpin.webp", 0.88, "11", "Tenpin — on location"],
-    ["assets/ritz.webp", 0.5, "07", "The Ritz — period set"],
-    ["assets/scarlxrd-fall.webp", 0.7, "03", "777 — sky unit"]
-  ],
-  clients: [
-    "Bring Me The Horizon",
-    "scarlxrd",
-    "Mika",
-    "adidas",
-    "Royal Enfield",
-    "Sennheiser",
-    "Marina Raphael",
-    "Tenpin",
-    "The Ritz London",
-    "EA Sports"
-  ],
-  rnd: [
-    { tag: "AI", title: "Latent Reels", desc: "Diffusion-driven motion tests & generative plate extension.", img: "assets/hypeman.webp" },
-    { tag: "GAME", title: "Crystal Run", desc: "A 2.5D side-scroller prototype built in-engine.", img: "assets/choose-fighter.webp" },
-    { tag: "SIM", title: "Ascension", desc: "Crowd & particle sims — thousands of bodies in freefall.", img: "assets/elevate.webp" },
-    { tag: "INTERACTIVE", title: "Pixel Floor", desc: "Real-time installation pixel-mapped to live audio.", img: "assets/scarlxrd-casino.webp" }
-  ],
-  // gallery: [src, aspect-ratio, index, caption]
-  gallery: [
-    ["assets/bmth-club.webp", "16/9", "01", "BMTH — 10 Statues"],
-    ["assets/scarlxrd-fall.webp", "16/9", "02", "scarlxrd — 777"],
-    ["assets/disappear.webp", "21/9", "03", "Disappear — MV"],
-    ["assets/tenpin.webp", "16/9", "04", "Tenpin"],
-    ["assets/fifa.webp", "3/2", "05", "EA Sports"],
-    ["assets/bmth-rave.webp", "16/9", "06", "BMTH — Rave"],
-    ["assets/ritz.webp", "4/3", "07", "The Ritz London"],
-    ["assets/sevn.webp", "16/9", "08", "Sevn"],
-    ["assets/elevate.webp", "16/9", "09", "Elevate — MV"],
-    ["assets/scarlxrd-casino.webp", "16/9", "10", "scarlxrd — 777"],
-    ["assets/choose-fighter.webp", "16/9", "11", "Choose Your Fighter"],
-    ["assets/bmth-arena.webp", "16/9", "12", "BMTH — Arena"],
-    ["assets/royal-enfield.webp", "16/9", "13", "Royal Enfield"],
-    ["assets/marina-raphael.webp", "16/9", "14", "Marina Raphael"],
-    ["assets/mika.webp", "3/2", "15", "Mika"],
-    ["assets/sennheiser.webp", "3/2", "16", "Sennheiser"],
-    ["assets/hypeman.webp", "2/1", "17", "Hypeman — R&D"],
-    ["assets/bmth-ruins.webp", "16/9", "18", "BMTH — Ruins"]
-  ]
-};
-window.openModal = (d) => window.dispatchEvent(new CustomEvent("wf:open", { detail: d }));
-window.WF.agencyWork = [
-  { img: "assets/marina-raphael.webp", agency: "Studio Blanc", project: "Marina Raphael — Mirage", role: "CG city build, projection & final comp" },
-  { img: "assets/mika.webp", agency: "Partizan", project: "Mika — Excuses For Love", role: "Pyro FX, sky replacement & cleanup" },
-  { img: "assets/fifa.webp", agency: "AKQA", project: "EA Sports — First Touch", role: "Energy FX, look-dev & compositing" },
-  { img: "assets/ritz.webp", agency: "Pulse Films", project: "The Ritz — Centenary", role: "Period set extensions & cleanup" },
-  { img: "assets/royal-enfield.webp", agency: "Iris Worldwide", project: "Royal Enfield — Cities", role: "Set ext, rig removal & grade" },
-  { img: "assets/sennheiser.webp", agency: "Bullion", project: "Sennheiser — Anatomy", role: "Full CG product & look-dev" }
-];
-window.WF.clients50 = [
-  "Bring Me The Horizon",
-  "scarlxrd",
-  "Mika",
-  "adidas",
-  "Royal Enfield",
-  "Sennheiser",
-  "Marina Raphael",
-  "Tenpin",
-  "The Ritz London",
-  "EA Sports",
-  "Nike",
-  "Burberry",
-  "Gucci",
-  "BBC",
-  "Channel 4",
-  "Sky",
-  "Universal Music",
-  "Warner",
-  "Sony Music",
-  "Pulse Films",
-  "Partizan",
-  "RSA Films",
-  "Somesuch",
-  "Academy Films",
-  "Stink",
-  "Riff Raff",
-  "Black Dog Films",
-  "Iris",
-  "AKQA",
-  "Wieden+Kennedy",
-  "Droga5",
-  "Mother",
-  "Pentagram",
-  "Dazed",
-  "Highsnobiety",
-  "Vogue",
-  "Nowness",
-  "Boiler Room",
-  "Glastonbury",
-  "O2",
-  "Vodafone",
-  "Samsung",
-  "BMW",
-  "Mercedes",
-  "Audi",
-  "Bose",
-  "Spotify",
-  "Apple Music",
-  "Amazon",
-  "Netflix"
-];
-window.WF.videos = [
-  "assets/videos/bmth.mp4",
-  "assets/videos/invergex.mp4",
-  "assets/videos/fifa.mp4",
-  "assets/videos/marina.mp4",
-  "assets/videos/sennheiser.mp4",
-  "assets/videos/tenpin.mp4"
-];
-window.WF.vid = function(i) {
-  var a = window.WF.videos, n = a.length, s = a[(i % n + n) % n];
-  return { src: s, poster: s.replace(/\.mp4$/, ".jpg") };
-};
-try {
-  window.WF.videos.forEach(function(s) {
-    var l = document.createElement("link");
-    l.rel = "preload";
-    l.as = "image";
-    l.href = s.replace(/\.mp4$/, ".jpg");
-    (document.head || document.documentElement).appendChild(l);
-  });
-} catch (e) {
-}
+    return fb(seed);
+  }
+  function clipOf(p, i) {
+    var c = p && p.clips && p.clips[i || 0];
+    return clipFrom(c && c.res, c && c.poster, (p ? p.id : "_") + ":c" + (i || 0));
+  }
+  function pairOf(p) {
+    var pr = p && p.beforeAfter && p.beforeAfter[0];
+    if (pr) return { before: clipFrom(pr.before, "", (p.id || "_") + ":b"), after: clipFrom(pr.after, "", (p.id || "_") + ":a"), real: true };
+    var f = clipOf(p, 0);
+    return { before: f, after: f, real: false };
+  }
+  function nm(p) {
+    return (p.brand || "—") + (p.name ? " — " + p.name : "");
+  }
+  function disc(p) {
+    if (p.credits) {
+      var got = [];
+      ["VFX Supervisor", "Director", "DoP", "Editor"].forEach(function(k) {
+        if (p.credits[k]) got.push(k === "VFX Supervisor" ? "VFX Sup" : k);
+      });
+      if (got.length) return got.join(" · ");
+    }
+    return "VFX · Compositing";
+  }
+  function index(hub) {
+    var m = {};
+    (hub.projects || []).forEach(function(p) {
+      m[p.id] = p;
+    });
+    return m;
+  }
+  function take(hub, n) {
+    return (hub.projects || []).slice(0, n).map(function(p) {
+      return { e: {}, p };
+    });
+  }
+  WF2.build = function(hub) {
+    var ix = index(hub), S = hub.sections || {};
+    function L(sec) {
+      return (S[sec] || []).map(function(e) {
+        return { e, p: ix[e.project] };
+      }).filter(function(x) {
+        return x.p;
+      });
+    }
+    WF2.featured = L("Featured").map(function(x, i) {
+      var p = x.p, v = clipOf(p, 0);
+      return {
+        n: String(i + 1).padStart(2, "0"),
+        client: p.brand || "—",
+        title: p.name || "",
+        cat: p.type || "Project",
+        role: disc(p),
+        blurb: p.summary || p.notes || "",
+        v,
+        poster: v.poster
+      };
+    });
+    WF2.styles = L("Styles").map(function(x, i) {
+      var p = x.p, e = x.e;
+      return {
+        k: String(i + 1).padStart(2, "0"),
+        name: (e.label || p.brand || "Look").toUpperCase(),
+        desc: e.caption || p.summary || "",
+        v: clipOf(p, 0)
+      };
+    });
+    WF2.ba = L("Before / After").map(function(x) {
+      var p = x.p;
+      return { client: nm(p), note: x.e.caption || disc(p), v: pairOf(p) };
+    });
+    var bts = L("On the day");
+    if (!bts.length) bts = take(hub, 7);
+    var ratios = [0.62, 0.42, 0.78, 0.55, 0.88, 0.5, 0.7];
+    WF2.bts = bts.map(function(x, i) {
+      var p = x.p;
+      var img = p.bts && p.bts[0] || clipOf(p, 0).poster;
+      return [img, ratios[i % ratios.length], String((i * 6 + 5) % 39 + 1).padStart(2, "0"), nm(p)];
+    });
+    var brands = [];
+    (hub.projects || []).forEach(function(p) {
+      if (p.brand && brands.indexOf(p.brand) < 0) brands.push(p.brand);
+    });
+    WF2.clients50 = brands.length ? brands : ["Wanderland Films"];
+    var ah = L("After Hours");
+    if (!ah.length) ah = take(hub, 4);
+    WF2.rnd = ah.map(function(x) {
+      var p = x.p, e = x.e;
+      return { tag: (e.label || "R&D").toUpperCase(), title: nm(p), desc: e.caption || p.summary || p.notes || "", v: clipOf(p, 0) };
+    });
+    var gal = L("Gallery");
+    if (!gal.length) gal = take(hub, 12);
+    var asp = ["16/9", "16/9", "21/9", "16/9", "3/2", "16/9", "4/3", "16/9", "16/9", "16/9", "16/9", "16/9", "3/2", "3/2", "2/1"];
+    WF2.gallery = gal.map(function(x, i) {
+      var p = x.p, v = clipOf(p, 0);
+      return [v.src, asp[i % asp.length], String(i % 18 + 1).padStart(2, "0"), nm(p), v.poster];
+    });
+    WF2.agencyWork = L("Agency").map(function(x) {
+      var p = x.p;
+      return { agency: p.agency || p.brand || "Studio", project: nm(p), role: p.ourRole || disc(p), v: clipOf(p, 0) };
+    });
+    WF2.heroReel = WF2.featured.length ? WF2.featured.map(function(f) {
+      return f.v;
+    }) : take(hub, 6).map(function(x) {
+      return clipOf(x.p, 0);
+    });
+    if (!WF2.heroReel.length) WF2.heroReel = FALLBACK.map(function(s) {
+      return { src: s, poster: s.replace(/\.mp4$/, ".jpg") };
+    });
+    if (!WF2.featured.length) {
+      var ff = fb("f");
+      WF2.featured = [{ n: "01", client: "—", title: "", cat: "", role: "", blurb: "", v: ff, poster: ff.poster }];
+    }
+    if (!WF2.styles.length) WF2.styles = [{ k: "01", name: "—", desc: "", v: fb("s") }];
+    if (!WF2.ba.length) {
+      var fc = fb("ba");
+      WF2.ba = [{ client: "—", note: "", v: { before: fc, after: fc, real: false } }];
+    }
+    if (!WF2.rnd.length) WF2.rnd = [{ tag: "R&D", title: "—", desc: "", v: fb("r") }];
+    if (!WF2.gallery.length) {
+      var gv = fb("g");
+      WF2.gallery = [[gv.src, "16/9", "01", "—", gv.poster]];
+    }
+    if (!WF2.agencyWork.length) WF2.agencyWork = [{ agency: "—", project: "—", role: "", v: fb("a") }];
+    if (!WF2.bts.length) WF2.bts = [[fb("b").poster, 0.6, "01", "—"]];
+  };
+  WF2.boot = function() {
+    return fetch("wanderland-hub.json", { cache: "no-store" }).then(function(r) {
+      if (!r.ok) throw 0;
+      return r.json();
+    }).then(function(hub) {
+      WF2.build(hub);
+      WF2.source = "hub";
+    }).catch(function() {
+      WF2.build({ projects: [], sections: {} });
+      WF2.source = "fallback";
+    });
+  };
+  window.openModal = function(d) {
+    window.dispatchEvent(new CustomEvent("wf:open", { detail: d }));
+  };
+  try {
+    FALLBACK.forEach(function(s) {
+      var l = document.createElement("link");
+      l.rel = "preload";
+      l.as = "image";
+      l.href = s.replace(/\.mp4$/, ".jpg");
+      (document.head || document.documentElement).appendChild(l);
+    });
+  } catch (e) {
+  }
+})();
 function Nav() {
   const items = ["Featured", "Styles", "Process", "BTS", "R&D", "Gallery", "Contact"];
   const ids = ["featured", "styles", "beforeafter", "bts", "rnd", "gallery", "contact"];
@@ -638,7 +604,7 @@ function FeaturedCarousel() {
   const trackRef = React.useRef(null);
   const [cur, setCur] = React.useState(0);
   const p = WF.featured[cur];
-  const open = () => window.openModal({ client: p.client, project: p.title, cat: p.cat, year: p.year, role: p.role, hero: p.img });
+  const open = () => window.openModal({ client: p.client, project: p.title, cat: p.cat, role: p.role, hero: p.poster });
   return /* @__PURE__ */ React.createElement("section", { id: "featured", style: { paddingTop: "clamp(50px,7vw,110px)", paddingBottom: "clamp(50px,7vw,110px)" } }, /* @__PURE__ */ React.createElement("style", null, `
         .fl-lead{position:relative;aspect-ratio:16/9;overflow:hidden;cursor:pointer;background:#000;}
         .fl-lead img,.fl-lead video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s;}
@@ -661,10 +627,7 @@ function FeaturedCarousel() {
         .fl-meta-in>*:nth-child(2){animation-delay:.1s;}
         .fl-meta-in>*:nth-child(3){animation-delay:.18s;}
         @keyframes flrise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-      `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(28px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 01 ]"), " Selected projects"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "FEATURED")), /* @__PURE__ */ React.createElement("span", { className: "mono", style: { fontSize: 12, letterSpacing: ".16em", color: "var(--mut-light)", paddingBottom: 10 } }, String(cur + 1).padStart(2, "0"), " / ", String(WF.featured.length).padStart(2, "0"))), /* @__PURE__ */ React.createElement("div", { className: "fl-lead", onClick: open }, WF.featured.map((f, i) => {
-    const v = WF.vid(i);
-    return /* @__PURE__ */ React.createElement(VideoMedia, { key: i, className: i === cur ? "on" : "", active: i === cur, src: v.src, poster: v.poster });
-  }), /* @__PURE__ */ React.createElement("div", { className: "fl-scrim" }), /* @__PURE__ */ React.createElement("div", { className: "fl-no" }, p.n), /* @__PURE__ */ React.createElement("div", { className: "fl-meta" }, /* @__PURE__ */ React.createElement("div", { key: cur, className: "fl-meta-in" }, /* @__PURE__ */ React.createElement("div", { className: "fl-cat" }, p.cat), /* @__PURE__ */ React.createElement("div", { className: "fl-client" }, p.client), /* @__PURE__ */ React.createElement("div", { className: "fl-sub" }, "“", p.title, "” — ", p.blurb)))), /* @__PURE__ */ React.createElement("div", { className: "fl-thumbs" }, WF.featured.map((f, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "fl-thumb" + (i === cur ? " active" : ""), onClick: () => setCur(i), onMouseEnter: () => setCur(i) }, /* @__PURE__ */ React.createElement("img", { src: WF.vid(i).poster, alt: f.client, loading: "lazy", decoding: "async" }), /* @__PURE__ */ React.createElement("span", { className: "tn" }, f.n))))));
+      `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(28px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 01 ]"), " Selected projects"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "FEATURED")), /* @__PURE__ */ React.createElement("span", { className: "mono", style: { fontSize: 12, letterSpacing: ".16em", color: "var(--mut-light)", paddingBottom: 10 } }, String(cur + 1).padStart(2, "0"), " / ", String(WF.featured.length).padStart(2, "0"))), /* @__PURE__ */ React.createElement("div", { className: "fl-lead", onClick: open }, WF.featured.map((f, i) => /* @__PURE__ */ React.createElement(VideoMedia, { key: i, className: i === cur ? "on" : "", active: i === cur, src: f.v.src, poster: f.v.poster })), /* @__PURE__ */ React.createElement("div", { className: "fl-scrim" }), /* @__PURE__ */ React.createElement("div", { className: "fl-no" }, p.n), /* @__PURE__ */ React.createElement("div", { className: "fl-meta" }, /* @__PURE__ */ React.createElement("div", { key: cur, className: "fl-meta-in" }, /* @__PURE__ */ React.createElement("div", { className: "fl-cat" }, p.cat), /* @__PURE__ */ React.createElement("div", { className: "fl-client" }, p.client), /* @__PURE__ */ React.createElement("div", { className: "fl-sub" }, "“", p.title, "” — ", p.blurb)))), /* @__PURE__ */ React.createElement("div", { className: "fl-thumbs" }, WF.featured.map((f, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "fl-thumb" + (i === cur ? " active" : ""), onClick: () => setCur(i), onMouseEnter: () => setCur(i) }, /* @__PURE__ */ React.createElement("img", { src: f.v.poster, alt: f.client, loading: "lazy", decoding: "async" }), /* @__PURE__ */ React.createElement("span", { className: "tn" }, f.n))))));
 }
 Object.assign(window, { Nav, Hero, FeaturedCarousel });
 const { useState, useRef } = React;
@@ -781,7 +744,7 @@ function Styles() {
           .acc-cap{width:100%;}
         }
       `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(24px,3.5vw,48px)" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 02 ]"), " Styles & looks"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "WE SPEAK", /* @__PURE__ */ React.createElement("br", null), "EVERY ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "LOOK."))), /* @__PURE__ */ React.createElement("p", { style: { fontWeight: 500, fontStyle: "italic", fontSize: "clamp(15px,1.15vw,18px)", lineHeight: 1.5, color: "var(--mut-light)", maxWidth: "34ch", paddingBottom: 10 } }, "Photoreal is a choice, not a given — we build in whatever look the story wants.")), /* @__PURE__ */ React.createElement("div", { className: "acc" }, WF.styles.map((s, i) => {
-    const v = WF.vid(i);
+    const v = s.v;
     return /* @__PURE__ */ React.createElement("div", { key: i, className: "acc-panel" + (open === i ? " open" : ""), onMouseEnter: () => setOpen(i), onClick: () => setOpen(i) }, /* @__PURE__ */ React.createElement(VideoMedia, { eager: armed, rewind: true, active: open === i, src: v.src, poster: v.poster }), /* @__PURE__ */ React.createElement("span", { className: "acc-k" }, s.k), /* @__PURE__ */ React.createElement("div", { className: "acc-cap" }, /* @__PURE__ */ React.createElement("div", { className: "acc-open-c" }, /* @__PURE__ */ React.createElement("h3", null, s.name), /* @__PURE__ */ React.createElement("p", null, s.desc))));
   }))));
 }
@@ -931,17 +894,17 @@ function BeforeAfter() {
           .ba-rail button{flex:0 0 auto;width:auto;height:54px;}
         }
       `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(24px,3.5vw,46px)" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 03 ]"), " Before & After"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(38px,6.5vw,108px)" } }, "BEFORE → ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "FINAL")))), /* @__PURE__ */ React.createElement("div", { className: "ba-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "ba", ref, style: { flex: 1, aspectRatio: "16/9", "--pos": pos + "%", cursor: "ew-resize" } }, opts.map((o, i) => {
-    const c = WF.vid(i);
+    const c = o.v;
     const on = i === cur;
     return /* @__PURE__ */ React.createElement(React.Fragment, { key: i }, /* @__PURE__ */ React.createElement("div", { className: "ba-fill", style: { opacity: on ? 1 : 0, transition: "opacity .2s" } }, /* @__PURE__ */ React.createElement("video", { ref: (el) => {
       backRefs.current[i] = el;
-    }, src: c.src, poster: c.poster, muted: true, loop: true, playsInline: true, preload: "none", disablePictureInPicture: true, style: { width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(.32) saturate(.55) contrast(.82) brightness(1.12)" } })), /* @__PURE__ */ React.createElement("div", { className: "ba-fill ba-final", style: { opacity: on ? 1 : 0, transition: "opacity .2s" } }, /* @__PURE__ */ React.createElement("video", { ref: (el) => {
+    }, src: c.before.src, poster: c.before.poster, muted: true, loop: true, playsInline: true, preload: "none", disablePictureInPicture: true, style: { width: "100%", height: "100%", objectFit: "cover", filter: c.real ? "none" : "grayscale(.32) saturate(.55) contrast(.82) brightness(1.12)" } })), /* @__PURE__ */ React.createElement("div", { className: "ba-fill ba-final", style: { opacity: on ? 1 : 0, transition: "opacity .2s" } }, /* @__PURE__ */ React.createElement("video", { ref: (el) => {
       frontRefs.current[i] = el;
-    }, src: c.src, poster: c.poster, muted: true, loop: true, playsInline: true, preload: "none", disablePictureInPicture: true, style: { width: "100%", height: "100%", objectFit: "cover" } })));
+    }, src: c.after.src, poster: c.after.poster, muted: true, loop: true, playsInline: true, preload: "none", disablePictureInPicture: true, style: { width: "100%", height: "100%", objectFit: "cover" } })));
   }), /* @__PURE__ */ React.createElement("div", { className: "ba-div" }), /* @__PURE__ */ React.createElement("div", { className: "ba-handle" }, "⟷"), /* @__PURE__ */ React.createElement("div", { className: "ba-tag l" }, "BEFORE"), /* @__PURE__ */ React.createElement("div", { className: "ba-tag r" }, "FINAL")), /* @__PURE__ */ React.createElement("div", { className: "ba-rail" }, WF.ba.map((b, i) => /* @__PURE__ */ React.createElement("button", { key: i, className: i === cur ? "active" : "", "aria-label": b.client, onClick: () => {
     setCur(i);
     setPos(50);
-  } }, /* @__PURE__ */ React.createElement("img", { src: WF.vid(i).poster, alt: b.client, loading: "lazy", decoding: "async" }), /* @__PURE__ */ React.createElement("span", { className: "rk" }, String(i + 1).padStart(2, "0")))))), /* @__PURE__ */ React.createElement("div", { className: "mono", style: { fontSize: 12, letterSpacing: ".1em", color: "var(--mut-light)", textTransform: "uppercase", marginTop: 14 } }, /* @__PURE__ */ React.createElement("span", { style: { color: "var(--ink)" } }, p.client), " — ", p.note)));
+  } }, /* @__PURE__ */ React.createElement("img", { src: b.v.after.poster, alt: b.client, loading: "lazy", decoding: "async" }), /* @__PURE__ */ React.createElement("span", { className: "rk" }, String(i + 1).padStart(2, "0")))))), /* @__PURE__ */ React.createElement("div", { className: "mono", style: { fontSize: 12, letterSpacing: ".1em", color: "var(--mut-light)", textTransform: "uppercase", marginTop: 14 } }, /* @__PURE__ */ React.createElement("span", { style: { color: "var(--ink)" } }, p.client), " — ", p.note)));
 }
 function ClientWall() {
   const names = [];
@@ -1037,7 +1000,7 @@ function AgencyWork() {
         .aw-card.live .aw-ov{opacity:1;}
         .aw-card.live .aw-ag,.aw-card.live .aw-pr,.aw-card.live .aw-role{opacity:1;transform:none;}
         .aw-card.live .aw-tab{opacity:0;}
-      `), /* @__PURE__ */ React.createElement("div", { className: "wrap", style: { marginBottom: "clamp(24px,3vw,46px)" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 06 ]"), " Studio to studio"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(34px,5.4vw,92px)" } }, "AGENCY ", /* @__PURE__ */ React.createElement("span", { className: "ital red" }, "work"))), /* @__PURE__ */ React.createElement("p", { style: { fontSize: "clamp(15px,1.15vw,18px)", lineHeight: 1.55, color: "var(--mut-light)", maxWidth: "38ch", paddingBottom: 8 } }, "Some of the work we’re proudest of came in through other studios & agencies — trusted peers who bring us in to share the load. Hover any frame for our role on it."))), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", gap: 8, marginBottom: 14 } }, /* @__PURE__ */ React.createElement("button", { className: "aw-arrow", "aria-label": "Previous", onClick: () => nudge(-1) }, "←"), /* @__PURE__ */ React.createElement("button", { className: "aw-arrow", "aria-label": "Next", onClick: () => nudge(1) }, "→")), /* @__PURE__ */ React.createElement("div", { className: "aw-track", ref: trackRef }, WF.agencyWork.map((a, i) => /* @__PURE__ */ React.createElement("div", { className: "aw-card" + ((noHover || hov < 0) && central === i ? " live" : ""), key: i, onMouseEnter: () => setHov(i), onMouseLeave: () => setHov(-1), onClick: () => window.openModal({ client: a.agency, project: a.project, cat: "Agency collaboration", year: "2024", role: a.role, hero: a.img }) }, /* @__PURE__ */ React.createElement(VideoMedia, { active: (!noHover && hov >= 0 ? hov : central) === i, src: WF.vid(i).src, poster: WF.vid(i).poster }), /* @__PURE__ */ React.createElement("div", { className: "aw-tab" }, String(i + 1).padStart(2, "0"), " · ", a.agency), /* @__PURE__ */ React.createElement("div", { className: "aw-ov" }, /* @__PURE__ */ React.createElement("div", { className: "aw-ag" }, a.agency), /* @__PURE__ */ React.createElement("div", { className: "aw-pr" }, a.project), /* @__PURE__ */ React.createElement("div", { className: "aw-role" }, "Our role — ", /* @__PURE__ */ React.createElement("span", null, a.role))))), /* @__PURE__ */ React.createElement("div", { style: { flex: "0 0 1px" } }))));
+      `), /* @__PURE__ */ React.createElement("div", { className: "wrap", style: { marginBottom: "clamp(24px,3vw,46px)" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 06 ]"), " Studio to studio"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(34px,5.4vw,92px)" } }, "AGENCY ", /* @__PURE__ */ React.createElement("span", { className: "ital red" }, "work"))), /* @__PURE__ */ React.createElement("p", { style: { fontSize: "clamp(15px,1.15vw,18px)", lineHeight: 1.55, color: "var(--mut-light)", maxWidth: "38ch", paddingBottom: 8 } }, "Some of the work we’re proudest of came in through other studios & agencies — trusted peers who bring us in to share the load. Hover any frame for our role on it."))), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", gap: 8, marginBottom: 14 } }, /* @__PURE__ */ React.createElement("button", { className: "aw-arrow", "aria-label": "Previous", onClick: () => nudge(-1) }, "←"), /* @__PURE__ */ React.createElement("button", { className: "aw-arrow", "aria-label": "Next", onClick: () => nudge(1) }, "→")), /* @__PURE__ */ React.createElement("div", { className: "aw-track", ref: trackRef }, WF.agencyWork.map((a, i) => /* @__PURE__ */ React.createElement("div", { className: "aw-card" + ((noHover || hov < 0) && central === i ? " live" : ""), key: i, onMouseEnter: () => setHov(i), onMouseLeave: () => setHov(-1), onClick: () => window.openModal({ client: a.agency, project: a.project, cat: "Agency collaboration", role: a.role, hero: a.v.poster }) }, /* @__PURE__ */ React.createElement(VideoMedia, { active: (!noHover && hov >= 0 ? hov : central) === i, src: a.v.src, poster: a.v.poster }), /* @__PURE__ */ React.createElement("div", { className: "aw-tab" }, String(i + 1).padStart(2, "0"), " · ", a.agency), /* @__PURE__ */ React.createElement("div", { className: "aw-ov" }, /* @__PURE__ */ React.createElement("div", { className: "aw-ag" }, a.agency), /* @__PURE__ */ React.createElement("div", { className: "aw-pr" }, a.project), /* @__PURE__ */ React.createElement("div", { className: "aw-role" }, "Our role — ", /* @__PURE__ */ React.createElement("span", null, a.role))))), /* @__PURE__ */ React.createElement("div", { style: { flex: "0 0 1px" } }))));
 }
 Object.assign(window, { Manifesto, Styles, BeforeAfter, ClientWall, AgencyWork });
 function copyToClipboard(text) {
@@ -1162,19 +1125,19 @@ function BTS() {
 }
 function RnD() {
   const exps = WF.rnd;
-  const order = [0, 1, 2, 3, 0, 1];
+  const order = Array.from({ length: 6 }, (_, i) => exps.length ? i % exps.length : 0);
   const [sel, setSel] = React.useState(0);
   const [noHover, setNoHover] = React.useState(false);
   React.useEffect(() => {
     setNoHover(!!(window.matchMedia && window.matchMedia("(hover: none)").matches));
   }, []);
-  const bg = WF.vid(sel).poster;
+  const bg = (exps[order[sel]] || exps[0]).v.poster;
   const prevRef = React.useRef(bg);
   const prev = prevRef.current;
   React.useEffect(() => {
     prevRef.current = bg;
   }, [bg]);
-  const open = (e) => window.openModal({ client: exps[e].title, project: exps[e].tag + " experiment", cat: "R&D — After Hours", year: "2025", role: exps[e].desc, hero: exps[e].img });
+  const open = (e) => window.openModal({ client: exps[e].title, project: exps[e].tag + " experiment", cat: "R&D — After Hours", role: exps[e].desc, hero: exps[e].v.poster });
   return /* @__PURE__ */ React.createElement("section", { id: "rnd", style: { background: "var(--ink)", color: "var(--paper)", paddingTop: "clamp(50px,7vw,110px)", paddingBottom: "clamp(50px,7vw,110px)", borderTop: "1px solid var(--line-dark)" } }, /* @__PURE__ */ React.createElement("style", null, `
         .ah-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:'Space Mono',monospace;
           font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut-dark);}
@@ -1212,7 +1175,7 @@ function RnD() {
       `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { className: "ah-head" }, /* @__PURE__ */ React.createElement("span", null, "[ 07 ] After hours — self-initiated"), /* @__PURE__ */ React.createElement("span", null, "Made for the love of the craft")), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(48px,12vw,210px)", lineHeight: 0.82, marginTop: "clamp(8px,1.2vw,16px)" } }, "AFTER ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "HOURS.")), /* @__PURE__ */ React.createElement("p", { style: { marginTop: "clamp(10px,1.5vw,18px)", fontWeight: 700, fontSize: "clamp(16px,1.9vw,28px)", letterSpacing: "-.01em" } }, "No brief. No client. ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "Just because.")), /* @__PURE__ */ React.createElement("div", { className: "ah-strip" }, /* @__PURE__ */ React.createElement("img", { className: "ah-bg", src: prev, alt: "", "aria-hidden": "true", decoding: "async" }), /* @__PURE__ */ React.createElement("img", { key: bg, className: "ah-bg", src: bg, alt: "", "aria-hidden": "true", decoding: "async", style: { animation: "ahbg .8s ease" } }), /* @__PURE__ */ React.createElement("div", { className: "ah-row" }, order.map((e, idx) => /* @__PURE__ */ React.createElement("div", { key: idx, className: "ah-col exp" + (idx === sel ? " open" : ""), onMouseEnter: () => setSel(idx), onClick: () => {
     if (noHover) setSel(idx);
     else open(e);
-  } }, /* @__PURE__ */ React.createElement(VideoMedia, { className: "ah-img", active: idx === sel, src: WF.vid(idx).src, poster: WF.vid(idx).poster }))))), /* @__PURE__ */ React.createElement("div", { className: "mono", style: { display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 10, marginTop: 14, fontSize: 11, letterSpacing: ".14em", color: "var(--mut-dark)", textTransform: "uppercase" } }, /* @__PURE__ */ React.createElement("span", null, noHover ? "Tap to expand" : "Hover to peek · click to open"), /* @__PURE__ */ React.createElement("span", null, "[ no brief · no client ]"), /* @__PURE__ */ React.createElement("span", null, "51.50°N · 0.12°W"))));
+  } }, /* @__PURE__ */ React.createElement(VideoMedia, { className: "ah-img", active: idx === sel, src: exps[e].v.src, poster: exps[e].v.poster }))))), /* @__PURE__ */ React.createElement("div", { className: "mono", style: { display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 10, marginTop: 14, fontSize: 11, letterSpacing: ".14em", color: "var(--mut-dark)", textTransform: "uppercase" } }, /* @__PURE__ */ React.createElement("span", null, noHover ? "Tap to expand" : "Hover to peek · click to open"), /* @__PURE__ */ React.createElement("span", null, "[ no brief · no client ]"), /* @__PURE__ */ React.createElement("span", null, "51.50°N · 0.12°W"))));
 }
 function Gallery() {
   const pool = [...WF.gallery, ...WF.gallery];
@@ -1266,7 +1229,7 @@ function Gallery() {
         .gal-item:hover img,.gal-item:hover video{filter:saturate(1.05) brightness(1.04);}
         .gal-cap{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:10.5px;
           letter-spacing:.1em;color:var(--mut-dark);text-transform:uppercase;margin-top:8px;}
-      `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(28px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "GALLERY"), /* @__PURE__ */ React.createElement("span", { className: "mono", style: { fontSize: "clamp(11px,1vw,13px)", letterSpacing: ".18em", color: "var(--mut-dark)", textTransform: "uppercase", paddingBottom: 10 } }, "Selected frames")), /* @__PURE__ */ React.createElement("div", { className: "gal-grid", ref: gridRef }, pool.slice(0, count).map((g, i) => /* @__PURE__ */ React.createElement("div", { key: i }, /* @__PURE__ */ React.createElement("div", { className: "gal-item", role: "button", onMouseEnter: () => setHov(i), onMouseLeave: () => setHov(-1), onClick: () => window.openModal({ client: g[3], cat: "Frame", year: "2025", hero: g[0] }) }, /* @__PURE__ */ React.createElement(VideoMedia, { active: noHover ? central === i : hov === i, src: WF.vid(i).src, poster: WF.vid(i).poster, style: { aspectRatio: g[1], objectFit: "cover" } })), /* @__PURE__ */ React.createElement("div", { className: "gal-cap" }, /* @__PURE__ */ React.createElement("span", { className: "red" }, String(i % WF.gallery.length + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("span", null, g[3]))))), count < pool.length && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "center", marginTop: "clamp(30px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("button", { onClick: () => setCount((c) => Math.min(c + 6, pool.length)), className: "mono", style: { cursor: "pointer", background: "transparent", color: "var(--paper)", border: "1px solid rgba(244,241,232,.4)", padding: "15px 30px", fontSize: 12, letterSpacing: ".18em", textTransform: "uppercase" } }, "Load more ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "+")))));
+      `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(28px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "GALLERY"), /* @__PURE__ */ React.createElement("span", { className: "mono", style: { fontSize: "clamp(11px,1vw,13px)", letterSpacing: ".18em", color: "var(--mut-dark)", textTransform: "uppercase", paddingBottom: 10 } }, "Selected frames")), /* @__PURE__ */ React.createElement("div", { className: "gal-grid", ref: gridRef }, pool.slice(0, count).map((g, i) => /* @__PURE__ */ React.createElement("div", { key: i }, /* @__PURE__ */ React.createElement("div", { className: "gal-item", role: "button", onMouseEnter: () => setHov(i), onMouseLeave: () => setHov(-1), onClick: () => window.openModal({ client: g[3], cat: "Frame", hero: g[4] }) }, /* @__PURE__ */ React.createElement(VideoMedia, { active: noHover ? central === i : hov === i, src: g[0], poster: g[4], style: { aspectRatio: g[1], objectFit: "cover" } })), /* @__PURE__ */ React.createElement("div", { className: "gal-cap" }, /* @__PURE__ */ React.createElement("span", { className: "red" }, String(i % WF.gallery.length + 1).padStart(2, "0")), /* @__PURE__ */ React.createElement("span", null, g[3]))))), count < pool.length && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "center", marginTop: "clamp(30px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("button", { onClick: () => setCount((c) => Math.min(c + 6, pool.length)), className: "mono", style: { cursor: "pointer", background: "transparent", color: "var(--paper)", border: "1px solid rgba(244,241,232,.4)", padding: "15px 30px", fontSize: 12, letterSpacing: ".18em", textTransform: "uppercase" } }, "Load more ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "+")))));
 }
 function Contact() {
   const [copied, setCopied] = React.useState(false);
@@ -1409,7 +1372,7 @@ function VideoMedia({ src, poster, active, hover, eager, rewind, className, styl
   );
 }
 function VideoReel() {
-  const vids = WF.videos;
+  const vids = WF.heroReel;
   const [idx, setIdx] = React.useState(0);
   const [visible, setVisible] = React.useState(true);
   const refs = React.useRef([]);
@@ -1474,15 +1437,15 @@ function VideoReel() {
       v.removeEventListener("loadeddata", onReady);
     };
   }, [idx, visible]);
-  return /* @__PURE__ */ React.createElement("div", { ref: wrapRef, style: { position: "absolute", inset: 0 } }, vids.map((src, i) => /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ React.createElement("div", { ref: wrapRef, style: { position: "absolute", inset: 0 } }, vids.map((clip, i) => /* @__PURE__ */ React.createElement(
     "video",
     {
       key: i,
       ref: (el) => {
         refs.current[i] = el;
       },
-      src,
-      poster: src.replace(/\.mp4$/, ".jpg"),
+      src: clip.src,
+      poster: clip.poster,
       muted: true,
       playsInline: true,
       preload: i === 0 ? "auto" : "none",
@@ -1523,7 +1486,7 @@ function ProjectModal() {
     };
   }, [data]);
   if (!data) return null;
-  const pool = WF.gallery.map((g) => g[0]).filter((s) => s !== data.hero);
+  const pool = WF.gallery.map((g) => g[4]).filter(Boolean).filter((s) => s !== data.hero);
   const loops = data.loops || [pool[0], pool[1], pool[2]];
   const frames = [data.hero, ...pool].filter(Boolean);
   const credits = [
@@ -1601,7 +1564,9 @@ function App() {
         .reel-count{position:absolute;left:14px;bottom:14px;z-index:3;font-size:11px;letter-spacing:.14em;color:#fff;text-shadow:0 1px 5px #000;}
       `), /* @__PURE__ */ React.createElement(Nav, null), /* @__PURE__ */ React.createElement("main", null, /* @__PURE__ */ React.createElement(Hero, null), /* @__PURE__ */ React.createElement(FeaturedCarousel, null), /* @__PURE__ */ React.createElement(Styles, null), /* @__PURE__ */ React.createElement(Manifesto, null), /* @__PURE__ */ React.createElement(BeforeAfter, null), /* @__PURE__ */ React.createElement(BTS, null), /* @__PURE__ */ React.createElement(AgencyWork, null), /* @__PURE__ */ React.createElement(ClientWall, null), /* @__PURE__ */ React.createElement(RnD, null), /* @__PURE__ */ React.createElement(Gallery, null)), /* @__PURE__ */ React.createElement(Contact, null), /* @__PURE__ */ React.createElement(ProjectModal, null));
 }
-ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(App, null));
+WF.boot().then(function() {
+  ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(App, null));
+});
 
 </script>
 </body>
