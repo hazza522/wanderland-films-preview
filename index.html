@@ -733,7 +733,24 @@ function Manifesto() {
 }
 function Styles() {
   const [open, setOpen] = useState(0);
-  return /* @__PURE__ */ React.createElement("section", { id: "styles", style: { paddingTop: "clamp(50px,7vw,110px)", paddingBottom: "clamp(50px,7vw,110px)" } }, /* @__PURE__ */ React.createElement("style", null, `
+  const secRef = useRef(null);
+  const [armed, setArmed] = useState(false);
+  React.useEffect(() => {
+    const el = secRef.current;
+    if (!el || !("IntersectionObserver" in window)) {
+      setArmed(true);
+      return;
+    }
+    const io = new IntersectionObserver((es) => {
+      if (es[0].isIntersecting) {
+        setArmed(true);
+        io.disconnect();
+      }
+    }, { rootMargin: "800px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return /* @__PURE__ */ React.createElement("section", { id: "styles", ref: secRef, style: { paddingTop: "clamp(50px,7vw,110px)", paddingBottom: "clamp(50px,7vw,110px)" } }, /* @__PURE__ */ React.createElement("style", null, `
         .acc{display:flex;gap:6px;height:clamp(400px,64vh,600px);}
         .acc-panel{position:relative;flex-grow:1;flex-shrink:1;flex-basis:0;overflow:hidden;cursor:pointer;min-width:0;
           transition:flex-grow .65s cubic-bezier(.2,.7,.2,1);}
@@ -741,11 +758,10 @@ function Styles() {
         .acc-panel img,.acc-panel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
           filter:grayscale(.45) brightness(.6);transition:filter .65s;}
         .acc-panel.open img,.acc-panel.open video{filter:none;}
-        /* poster <img> is the always-on base of every panel; the <video> stays
-           invisible until its panel is open AND has finished expanding (opacity
-           delay > the .65s flex-grow), so resizing a live video never shows. */
-        .acc-panel video{opacity:0;transition:filter .65s,opacity .3s .55s;transform:translateZ(0);backface-visibility:hidden;}
-        .acc-panel.open video{opacity:1;}
+        /* each panel IS the video, warmed + paused on frame 0; selecting a panel
+           just plays it (no poster->video handoff to snap). GPU-layer hint keeps
+           the texture stable while the panel resizes. */
+        .acc-panel video{transform:translateZ(0);backface-visibility:hidden;}
         .acc-panel::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,.78),rgba(10,10,10,0) 55%);}
         .acc-cap{position:absolute;left:0;bottom:0;width:min(48vw,800px);z-index:2;padding:clamp(16px,1.6vw,26px);color:var(--paper);}
         .acc-k{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.16em;color:var(--red);position:absolute;top:16px;left:16px;z-index:2;}
@@ -765,7 +781,7 @@ function Styles() {
         }
       `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(24px,3.5vw,48px)" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 02 ]"), " Styles & looks"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "WE SPEAK", /* @__PURE__ */ React.createElement("br", null), "EVERY ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "LOOK."))), /* @__PURE__ */ React.createElement("p", { style: { fontWeight: 500, fontStyle: "italic", fontSize: "clamp(15px,1.15vw,18px)", lineHeight: 1.5, color: "var(--mut-light)", maxWidth: "34ch", paddingBottom: 10 } }, "Photoreal is a choice, not a given — we build in whatever look the story wants.")), /* @__PURE__ */ React.createElement("div", { className: "acc" }, WF.styles.map((s, i) => {
     const v = WF.vid(i);
-    return /* @__PURE__ */ React.createElement("div", { key: i, className: "acc-panel" + (open === i ? " open" : ""), onMouseEnter: () => setOpen(i), onClick: () => setOpen(i) }, /* @__PURE__ */ React.createElement("img", { className: "acc-poster", src: v.poster, alt: "", "aria-hidden": "true", decoding: "async" }), /* @__PURE__ */ React.createElement(VideoMedia, { active: open === i, src: v.src, poster: v.poster }), /* @__PURE__ */ React.createElement("span", { className: "acc-k" }, s.k), /* @__PURE__ */ React.createElement("div", { className: "acc-cap" }, /* @__PURE__ */ React.createElement("div", { className: "acc-open-c" }, /* @__PURE__ */ React.createElement("h3", null, s.name), /* @__PURE__ */ React.createElement("p", null, s.desc))));
+    return /* @__PURE__ */ React.createElement("div", { key: i, className: "acc-panel" + (open === i ? " open" : ""), onMouseEnter: () => setOpen(i), onClick: () => setOpen(i) }, /* @__PURE__ */ React.createElement(VideoMedia, { eager: armed, rewind: true, active: open === i, src: v.src, poster: v.poster }), /* @__PURE__ */ React.createElement("span", { className: "acc-k" }, s.k), /* @__PURE__ */ React.createElement("div", { className: "acc-cap" }, /* @__PURE__ */ React.createElement("div", { className: "acc-open-c" }, /* @__PURE__ */ React.createElement("h3", null, s.name), /* @__PURE__ */ React.createElement("p", null, s.desc))));
   }))));
 }
 function BeforeAfter() {
@@ -968,7 +984,7 @@ function BTS() {
     let raf;
     const step = () => {
       if (!pause.current) {
-        vp.scrollLeft += 0.6;
+        vp.scrollLeft += 1.2;
         const half = vp.scrollWidth / 2;
         if (half > 0 && vp.scrollLeft >= half) vp.scrollLeft -= half;
       }
@@ -1153,7 +1169,7 @@ function ReelPlayer({ frames, fps, chrome, fade }) {
     setPlaying((v) => !v);
   } }, playing ? "❚❚" : "▶"), /* @__PURE__ */ React.createElement("div", { className: "mono reel-count" }, "FRAME ", String(idx + 1).padStart(2, "0"), " / ", String(frames.length).padStart(2, "0"), " · ", fps, " FPS")));
 }
-function VideoMedia({ src, poster, active, hover, className, style }) {
+function VideoMedia({ src, poster, active, hover, eager, rewind, className, style }) {
   const ref = React.useRef(null);
   const [hovered, setHovered] = React.useState(false);
   const [near, setNear] = React.useState(false);
@@ -1169,7 +1185,7 @@ function VideoMedia({ src, poster, active, hover, className, style }) {
   }, []);
   React.useEffect(() => {
     const v = ref.current;
-    if (!v || !near) return;
+    if (!v || !(near || eager)) return;
     if (v.preload !== "auto") v.preload = "auto";
     if (v.readyState === 0) {
       try {
@@ -1177,7 +1193,7 @@ function VideoMedia({ src, poster, active, hover, className, style }) {
       } catch (e) {
       }
     }
-  }, [near]);
+  }, [near, eager]);
   const playing = near && (active || hover && hovered);
   React.useEffect(() => {
     const v = ref.current;
@@ -1191,11 +1207,16 @@ function VideoMedia({ src, poster, active, hover, className, style }) {
     }
     let done = false;
     const go = () => {
-      if (!done) {
-        const p = v.play();
-        if (p && p.catch) p.catch(() => {
-        });
+      if (done) return;
+      if (rewind) {
+        try {
+          v.currentTime = 0;
+        } catch (e) {
+        }
       }
+      const p = v.play();
+      if (p && p.catch) p.catch(() => {
+      });
     };
     if (v.readyState >= 2) {
       go();
