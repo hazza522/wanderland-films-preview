@@ -741,6 +741,11 @@ function Styles() {
         .acc-panel img,.acc-panel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
           filter:grayscale(.45) brightness(.6);transition:filter .65s;}
         .acc-panel.open img,.acc-panel.open video{filter:none;}
+        /* poster <img> is the always-on base of every panel; the <video> stays
+           invisible until its panel is open AND has finished expanding (opacity
+           delay > the .65s flex-grow), so resizing a live video never shows. */
+        .acc-panel video{opacity:0;transition:filter .65s,opacity .3s .55s;transform:translateZ(0);backface-visibility:hidden;}
+        .acc-panel.open video{opacity:1;}
         .acc-panel::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,.78),rgba(10,10,10,0) 55%);}
         .acc-cap{position:absolute;left:0;bottom:0;width:min(48vw,800px);z-index:2;padding:clamp(16px,1.6vw,26px);color:var(--paper);}
         .acc-k{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.16em;color:var(--red);position:absolute;top:16px;left:16px;z-index:2;}
@@ -758,7 +763,10 @@ function Styles() {
           .acc-panel.open{height:300px;}
           .acc-cap{width:100%;}
         }
-      `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(24px,3.5vw,48px)" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 02 ]"), " Styles & looks"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "WE SPEAK", /* @__PURE__ */ React.createElement("br", null), "EVERY ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "LOOK."))), /* @__PURE__ */ React.createElement("p", { style: { fontWeight: 500, fontStyle: "italic", fontSize: "clamp(15px,1.15vw,18px)", lineHeight: 1.5, color: "var(--mut-light)", maxWidth: "34ch", paddingBottom: 10 } }, "Photoreal is a choice, not a given — we build in whatever look the story wants.")), /* @__PURE__ */ React.createElement("div", { className: "acc" }, WF.styles.map((s, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "acc-panel" + (open === i ? " open" : ""), onMouseEnter: () => setOpen(i), onClick: () => setOpen(i) }, /* @__PURE__ */ React.createElement(VideoMedia, { active: open === i, src: WF.vid(i).src, poster: WF.vid(i).poster }), /* @__PURE__ */ React.createElement("span", { className: "acc-k" }, s.k), /* @__PURE__ */ React.createElement("div", { className: "acc-cap" }, /* @__PURE__ */ React.createElement("div", { className: "acc-open-c" }, /* @__PURE__ */ React.createElement("h3", null, s.name), /* @__PURE__ */ React.createElement("p", null, s.desc))))))));
+      `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(24px,3.5vw,48px)" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 02 ]"), " Styles & looks"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "WE SPEAK", /* @__PURE__ */ React.createElement("br", null), "EVERY ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "LOOK."))), /* @__PURE__ */ React.createElement("p", { style: { fontWeight: 500, fontStyle: "italic", fontSize: "clamp(15px,1.15vw,18px)", lineHeight: 1.5, color: "var(--mut-light)", maxWidth: "34ch", paddingBottom: 10 } }, "Photoreal is a choice, not a given — we build in whatever look the story wants.")), /* @__PURE__ */ React.createElement("div", { className: "acc" }, WF.styles.map((s, i) => {
+    const v = WF.vid(i);
+    return /* @__PURE__ */ React.createElement("div", { key: i, className: "acc-panel" + (open === i ? " open" : ""), onMouseEnter: () => setOpen(i), onClick: () => setOpen(i) }, /* @__PURE__ */ React.createElement("img", { className: "acc-poster", src: v.poster, alt: "", "aria-hidden": "true", decoding: "async" }), /* @__PURE__ */ React.createElement(VideoMedia, { active: open === i, src: v.src, poster: v.poster }), /* @__PURE__ */ React.createElement("span", { className: "acc-k" }, s.k), /* @__PURE__ */ React.createElement("div", { className: "acc-cap" }, /* @__PURE__ */ React.createElement("div", { className: "acc-open-c" }, /* @__PURE__ */ React.createElement("h3", null, s.name), /* @__PURE__ */ React.createElement("p", null, s.desc))));
+  }))));
 }
 function BeforeAfter() {
   const [cur, setCur] = useState(0);
@@ -1138,7 +1146,6 @@ function VideoMedia({ src, poster, active, hover, className, style }) {
     if (!playing) {
       try {
         v.pause();
-        v.currentTime = 0;
       } catch (e) {
       }
       return;
