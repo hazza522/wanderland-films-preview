@@ -968,46 +968,48 @@ function AgencyWork() {
     setNoHover(!!(window.matchMedia && window.matchMedia("(hover: none)").matches));
   }, []);
   React.useEffect(() => {
-    if (!noHover) return;
     const t = trackRef.current;
     if (!t) return;
     let raf = 0;
     const compute = () => {
       raf = 0;
+      const tr = t.getBoundingClientRect();
+      const cx = tr.left + tr.width / 2;
       const cards = t.querySelectorAll(".aw-card");
-      const cx = window.innerWidth / 2;
-      let best = -1, bestD = Infinity;
+      let best = 0, bestD = Infinity;
       cards.forEach((el, idx) => {
         const r = el.getBoundingClientRect();
-        if (r.right < 0 || r.left > window.innerWidth) return;
         const d = Math.abs((r.left + r.right) / 2 - cx);
         if (d < bestD) {
           bestD = d;
           best = idx;
         }
       });
-      if (best >= 0) setCentral(best);
+      setCentral(best);
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(compute);
     };
     compute();
     t.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
     return () => {
       t.removeEventListener("scroll", onScroll);
-      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [noHover]);
+  }, []);
   const nudge = (d) => {
     const t = trackRef.current;
     if (!t) return;
-    const c = t.querySelector(".aw-card");
-    const w = c ? c.getBoundingClientRect().width + 18 : t.clientWidth * 0.8;
-    t.scrollBy({ left: d * w, behavior: "smooth" });
+    const cards = t.querySelectorAll(".aw-card");
+    const n = cards.length;
+    if (!n) return;
+    const idx = Math.max(0, Math.min(n - 1, central + d));
+    const card = cards[idx];
+    if (!card) return;
+    const tr = t.getBoundingClientRect(), cr = card.getBoundingClientRect();
+    t.scrollTo({ left: t.scrollLeft + (cr.left - tr.left) - (t.clientWidth - cr.width) / 2, behavior: "smooth" });
   };
   return /* @__PURE__ */ React.createElement("section", { id: "agency", style: { paddingTop: "clamp(50px,7vw,110px)", paddingBottom: "clamp(50px,7vw,110px)" } }, /* @__PURE__ */ React.createElement("style", null, `
         .aw-track{display:flex;gap:clamp(10px,1.3vw,20px);overflow-x:auto;scrollbar-width:none;padding-bottom:6px;}
@@ -1035,7 +1037,7 @@ function AgencyWork() {
         .aw-card.live .aw-ov{opacity:1;}
         .aw-card.live .aw-ag,.aw-card.live .aw-pr,.aw-card.live .aw-role{opacity:1;transform:none;}
         .aw-card.live .aw-tab{opacity:0;}
-      `), /* @__PURE__ */ React.createElement("div", { className: "wrap", style: { marginBottom: "clamp(24px,3vw,46px)" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 06 ]"), " Studio to studio"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(34px,5.4vw,92px)" } }, "AGENCY ", /* @__PURE__ */ React.createElement("span", { className: "ital red" }, "work"))), /* @__PURE__ */ React.createElement("p", { style: { fontSize: "clamp(15px,1.15vw,18px)", lineHeight: 1.55, color: "var(--mut-light)", maxWidth: "38ch", paddingBottom: 8 } }, "Some of the work we’re proudest of came in through other studios & agencies — trusted peers who bring us in to share the load. Hover any frame for our role on it."))), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", gap: 8, marginBottom: 14 } }, /* @__PURE__ */ React.createElement("button", { className: "aw-arrow", "aria-label": "Previous", onClick: () => nudge(-1) }, "←"), /* @__PURE__ */ React.createElement("button", { className: "aw-arrow", "aria-label": "Next", onClick: () => nudge(1) }, "→")), /* @__PURE__ */ React.createElement("div", { className: "aw-track", ref: trackRef }, WF.agencyWork.map((a, i) => /* @__PURE__ */ React.createElement("div", { className: "aw-card" + (noHover && central === i ? " live" : ""), key: i, onMouseEnter: () => setHov(i), onMouseLeave: () => setHov(-1), onClick: () => window.openModal({ client: a.agency, project: a.project, cat: "Agency collaboration", year: "2024", role: a.role, hero: a.img }) }, /* @__PURE__ */ React.createElement(VideoMedia, { active: noHover ? central === i : hov === i, src: WF.vid(i).src, poster: WF.vid(i).poster }), /* @__PURE__ */ React.createElement("div", { className: "aw-tab" }, String(i + 1).padStart(2, "0"), " · ", a.agency), /* @__PURE__ */ React.createElement("div", { className: "aw-ov" }, /* @__PURE__ */ React.createElement("div", { className: "aw-ag" }, a.agency), /* @__PURE__ */ React.createElement("div", { className: "aw-pr" }, a.project), /* @__PURE__ */ React.createElement("div", { className: "aw-role" }, "Our role — ", /* @__PURE__ */ React.createElement("span", null, a.role))))), /* @__PURE__ */ React.createElement("div", { style: { flex: "0 0 1px" } }))));
+      `), /* @__PURE__ */ React.createElement("div", { className: "wrap", style: { marginBottom: "clamp(24px,3vw,46px)" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 06 ]"), " Studio to studio"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(34px,5.4vw,92px)" } }, "AGENCY ", /* @__PURE__ */ React.createElement("span", { className: "ital red" }, "work"))), /* @__PURE__ */ React.createElement("p", { style: { fontSize: "clamp(15px,1.15vw,18px)", lineHeight: 1.55, color: "var(--mut-light)", maxWidth: "38ch", paddingBottom: 8 } }, "Some of the work we’re proudest of came in through other studios & agencies — trusted peers who bring us in to share the load. Hover any frame for our role on it."))), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", gap: 8, marginBottom: 14 } }, /* @__PURE__ */ React.createElement("button", { className: "aw-arrow", "aria-label": "Previous", onClick: () => nudge(-1) }, "←"), /* @__PURE__ */ React.createElement("button", { className: "aw-arrow", "aria-label": "Next", onClick: () => nudge(1) }, "→")), /* @__PURE__ */ React.createElement("div", { className: "aw-track", ref: trackRef }, WF.agencyWork.map((a, i) => /* @__PURE__ */ React.createElement("div", { className: "aw-card" + ((noHover || hov < 0) && central === i ? " live" : ""), key: i, onMouseEnter: () => setHov(i), onMouseLeave: () => setHov(-1), onClick: () => window.openModal({ client: a.agency, project: a.project, cat: "Agency collaboration", year: "2024", role: a.role, hero: a.img }) }, /* @__PURE__ */ React.createElement(VideoMedia, { active: (!noHover && hov >= 0 ? hov : central) === i, src: WF.vid(i).src, poster: WF.vid(i).poster }), /* @__PURE__ */ React.createElement("div", { className: "aw-tab" }, String(i + 1).padStart(2, "0"), " · ", a.agency), /* @__PURE__ */ React.createElement("div", { className: "aw-ov" }, /* @__PURE__ */ React.createElement("div", { className: "aw-ag" }, a.agency), /* @__PURE__ */ React.createElement("div", { className: "aw-pr" }, a.project), /* @__PURE__ */ React.createElement("div", { className: "aw-role" }, "Our role — ", /* @__PURE__ */ React.createElement("span", null, a.role))))), /* @__PURE__ */ React.createElement("div", { style: { flex: "0 0 1px" } }))));
 }
 Object.assign(window, { Manifesto, Styles, BeforeAfter, ClientWall, AgencyWork });
 function copyToClipboard(text) {
