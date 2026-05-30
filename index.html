@@ -663,7 +663,7 @@ function FeaturedCarousel() {
       `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16, marginBottom: "clamp(28px,4vw,56px)" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 01 ]"), " Selected projects"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(40px,7vw,120px)" } }, "FEATURED")), /* @__PURE__ */ React.createElement("span", { className: "mono", style: { fontSize: 12, letterSpacing: ".16em", color: "var(--mut-light)", paddingBottom: 10 } }, String(cur + 1).padStart(2, "0"), " / ", String(WF.featured.length).padStart(2, "0"))), /* @__PURE__ */ React.createElement("div", { className: "fl-lead", onClick: open }, WF.featured.map((f, i) => {
     const v = WF.vid(i);
     return /* @__PURE__ */ React.createElement(VideoMedia, { key: i, className: i === cur ? "on" : "", active: i === cur, src: v.src, poster: v.poster });
-  }), /* @__PURE__ */ React.createElement("div", { className: "fl-scrim" }), /* @__PURE__ */ React.createElement("div", { className: "fl-no" }, p.n), /* @__PURE__ */ React.createElement("div", { className: "fl-meta" }, /* @__PURE__ */ React.createElement("div", { key: cur, className: "fl-meta-in" }, /* @__PURE__ */ React.createElement("div", { className: "fl-cat" }, p.cat, " · ", p.year), /* @__PURE__ */ React.createElement("div", { className: "fl-client" }, p.client), /* @__PURE__ */ React.createElement("div", { className: "fl-sub" }, "“", p.title, "” — ", p.blurb)), /* @__PURE__ */ React.createElement("span", { className: "fl-open" }, "OPEN PROJECT ", /* @__PURE__ */ React.createElement("span", { style: { fontSize: 17 } }, "↗")))), /* @__PURE__ */ React.createElement("div", { className: "fl-thumbs" }, WF.featured.map((f, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "fl-thumb" + (i === cur ? " active" : ""), onClick: () => setCur(i), onMouseEnter: () => setCur(i) }, /* @__PURE__ */ React.createElement("img", { src: WF.vid(i).poster, alt: f.client, loading: "lazy", decoding: "async" }), /* @__PURE__ */ React.createElement("span", { className: "tn" }, f.n))))));
+  }), /* @__PURE__ */ React.createElement("div", { className: "fl-scrim" }), /* @__PURE__ */ React.createElement("div", { className: "fl-no" }, p.n), /* @__PURE__ */ React.createElement("div", { className: "fl-meta" }, /* @__PURE__ */ React.createElement("div", { key: cur, className: "fl-meta-in" }, /* @__PURE__ */ React.createElement("div", { className: "fl-cat" }, p.cat, " · ", p.year), /* @__PURE__ */ React.createElement("div", { className: "fl-client" }, p.client), /* @__PURE__ */ React.createElement("div", { className: "fl-sub" }, "“", p.title, "” — ", p.blurb)))), /* @__PURE__ */ React.createElement("div", { className: "fl-thumbs" }, WF.featured.map((f, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "fl-thumb" + (i === cur ? " active" : ""), onClick: () => setCur(i), onMouseEnter: () => setCur(i) }, /* @__PURE__ */ React.createElement("img", { src: WF.vid(i).poster, alt: f.client, loading: "lazy", decoding: "async" }), /* @__PURE__ */ React.createElement("span", { className: "tn" }, f.n))))));
 }
 Object.assign(window, { Nav, Hero, FeaturedCarousel });
 const { useState, useRef } = React;
@@ -728,7 +728,7 @@ function Manifesto() {
           mask:url('assets/logo-icon.png') center/contain no-repeat;}
         .mf-label{position:absolute;left:50%;bottom:-28px;transform:translateX(-50%);white-space:nowrap;
           font-size:11px;letter-spacing:.16em;color:var(--mut-dark);text-transform:uppercase;}
-        @media(max-width:760px){.mf-grid{grid-template-columns:1fr;}.mf-fig{justify-self:start;margin-top:40px;}}
+        @media(max-width:760px){.mf-grid{grid-template-columns:1fr;}.mf-fig{justify-self:center;margin-top:48px;}}
       `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { className: "mf-grid" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "mono", style: { fontSize: 11, letterSpacing: ".2em", color: "var(--red)", textTransform: "uppercase", marginBottom: 18 } }, "[ ✻ ] Approach — the right tool"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(44px,8vw,150px)", lineHeight: 0.84 } }, "NOT EVERYTHING", /* @__PURE__ */ React.createElement("br", null), "IS A ", /* @__PURE__ */ React.createElement("span", { style: { position: "relative", display: "inline-block", width: "3.4em", verticalAlign: "baseline" } }, /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true", style: { visibility: "hidden" } }, "NAIL."), /* @__PURE__ */ React.createElement("span", { style: { position: "absolute", left: 0, bottom: 0, whiteSpace: "nowrap", ...ns } }, "NAIL."))), /* @__PURE__ */ React.createElement("p", { style: { marginTop: "clamp(20px,2.5vw,38px)", maxWidth: "44ch", fontWeight: 600, fontSize: "clamp(16px,1.5vw,22px)", lineHeight: 1.45, color: "var(--mut-dark)" } }, "Great visuals start with ", /* @__PURE__ */ React.createElement("span", { className: "ital red" }, "problem-solving"), ". Practical, CG, generative AI, compositing — we match the technique to the problem, never force the problem to fit one favourite tool.")), /* @__PURE__ */ React.createElement("div", { className: "mf-fig" }, /* @__PURE__ */ React.createElement("div", { className: "mf-mask", style: { background: t.bg } }), /* @__PURE__ */ React.createElement("div", { className: "mono mf-label" }, t.label)))));
 }
 function Styles() {
@@ -962,6 +962,46 @@ function ClientWall() {
 function AgencyWork() {
   const trackRef = useRef(null);
   const [hov, setHov] = useState(-1);
+  const [noHover, setNoHover] = useState(false);
+  const [central, setCentral] = useState(0);
+  React.useEffect(() => {
+    setNoHover(!!(window.matchMedia && window.matchMedia("(hover: none)").matches));
+  }, []);
+  React.useEffect(() => {
+    if (!noHover) return;
+    const t = trackRef.current;
+    if (!t) return;
+    let raf = 0;
+    const compute = () => {
+      raf = 0;
+      const cards = t.querySelectorAll(".aw-card");
+      const cx = window.innerWidth / 2;
+      let best = -1, bestD = Infinity;
+      cards.forEach((el, idx) => {
+        const r = el.getBoundingClientRect();
+        if (r.right < 0 || r.left > window.innerWidth) return;
+        const d = Math.abs((r.left + r.right) / 2 - cx);
+        if (d < bestD) {
+          bestD = d;
+          best = idx;
+        }
+      });
+      if (best >= 0) setCentral(best);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(compute);
+    };
+    compute();
+    t.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      t.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [noHover]);
   const nudge = (d) => {
     const t = trackRef.current;
     if (!t) return;
@@ -991,7 +1031,11 @@ function AgencyWork() {
         .aw-role span{font-style:italic;}
         .aw-tab{position:absolute;left:14px;top:13px;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:var(--paper);text-shadow:0 1px 5px #000;transition:opacity .4s;}
         .aw-card:hover .aw-tab{opacity:0;}
-      `), /* @__PURE__ */ React.createElement("div", { className: "wrap", style: { marginBottom: "clamp(24px,3vw,46px)" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 06 ]"), " Studio to studio"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(34px,5.4vw,92px)" } }, "AGENCY ", /* @__PURE__ */ React.createElement("span", { className: "ital red" }, "work"))), /* @__PURE__ */ React.createElement("p", { style: { fontSize: "clamp(15px,1.15vw,18px)", lineHeight: 1.55, color: "var(--mut-light)", maxWidth: "38ch", paddingBottom: 8 } }, "Some of the work we’re proudest of came in through other studios & agencies — trusted peers who bring us in to share the load. Hover any frame for our role on it."))), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", gap: 8, marginBottom: 14 } }, /* @__PURE__ */ React.createElement("button", { className: "aw-arrow", "aria-label": "Previous", onClick: () => nudge(-1) }, "←"), /* @__PURE__ */ React.createElement("button", { className: "aw-arrow", "aria-label": "Next", onClick: () => nudge(1) }, "→")), /* @__PURE__ */ React.createElement("div", { className: "aw-track", ref: trackRef }, WF.agencyWork.map((a, i) => /* @__PURE__ */ React.createElement("div", { className: "aw-card", key: i, onMouseEnter: () => setHov(i), onMouseLeave: () => setHov(-1), onClick: () => window.openModal({ client: a.agency, project: a.project, cat: "Agency collaboration", year: "2024", role: a.role, hero: a.img }) }, /* @__PURE__ */ React.createElement(VideoMedia, { active: hov === i, src: WF.vid(i).src, poster: WF.vid(i).poster }), /* @__PURE__ */ React.createElement("div", { className: "aw-tab" }, String(i + 1).padStart(2, "0"), " · ", a.agency), /* @__PURE__ */ React.createElement("div", { className: "aw-ov" }, /* @__PURE__ */ React.createElement("div", { className: "aw-ag" }, a.agency), /* @__PURE__ */ React.createElement("div", { className: "aw-pr" }, a.project), /* @__PURE__ */ React.createElement("div", { className: "aw-role" }, "Our role — ", /* @__PURE__ */ React.createElement("span", null, a.role))))), /* @__PURE__ */ React.createElement("div", { style: { flex: "0 0 1px" } }))));
+        .aw-card.live img,.aw-card.live video{filter:none;}
+        .aw-card.live .aw-ov{opacity:1;}
+        .aw-card.live .aw-ag,.aw-card.live .aw-pr,.aw-card.live .aw-role{opacity:1;transform:none;}
+        .aw-card.live .aw-tab{opacity:0;}
+      `), /* @__PURE__ */ React.createElement("div", { className: "wrap", style: { marginBottom: "clamp(24px,3vw,46px)" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 06 ]"), " Studio to studio"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(34px,5.4vw,92px)" } }, "AGENCY ", /* @__PURE__ */ React.createElement("span", { className: "ital red" }, "work"))), /* @__PURE__ */ React.createElement("p", { style: { fontSize: "clamp(15px,1.15vw,18px)", lineHeight: 1.55, color: "var(--mut-light)", maxWidth: "38ch", paddingBottom: 8 } }, "Some of the work we’re proudest of came in through other studios & agencies — trusted peers who bring us in to share the load. Hover any frame for our role on it."))), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", gap: 8, marginBottom: 14 } }, /* @__PURE__ */ React.createElement("button", { className: "aw-arrow", "aria-label": "Previous", onClick: () => nudge(-1) }, "←"), /* @__PURE__ */ React.createElement("button", { className: "aw-arrow", "aria-label": "Next", onClick: () => nudge(1) }, "→")), /* @__PURE__ */ React.createElement("div", { className: "aw-track", ref: trackRef }, WF.agencyWork.map((a, i) => /* @__PURE__ */ React.createElement("div", { className: "aw-card" + (noHover && central === i ? " live" : ""), key: i, onMouseEnter: () => setHov(i), onMouseLeave: () => setHov(-1), onClick: () => window.openModal({ client: a.agency, project: a.project, cat: "Agency collaboration", year: "2024", role: a.role, hero: a.img }) }, /* @__PURE__ */ React.createElement(VideoMedia, { active: noHover ? central === i : hov === i, src: WF.vid(i).src, poster: WF.vid(i).poster }), /* @__PURE__ */ React.createElement("div", { className: "aw-tab" }, String(i + 1).padStart(2, "0"), " · ", a.agency), /* @__PURE__ */ React.createElement("div", { className: "aw-ov" }, /* @__PURE__ */ React.createElement("div", { className: "aw-ag" }, a.agency), /* @__PURE__ */ React.createElement("div", { className: "aw-pr" }, a.project), /* @__PURE__ */ React.createElement("div", { className: "aw-role" }, "Our role — ", /* @__PURE__ */ React.createElement("span", null, a.role))))), /* @__PURE__ */ React.createElement("div", { style: { flex: "0 0 1px" } }))));
 }
 Object.assign(window, { Manifesto, Styles, BeforeAfter, ClientWall, AgencyWork });
 function copyToClipboard(text) {
@@ -1019,34 +1063,70 @@ function copyToClipboard(text) {
 function BTS() {
   const vpRef = React.useRef(null);
   const pause = React.useRef(false);
+  const [noHover, setNoHover] = React.useState(false);
+  React.useEffect(() => {
+    setNoHover(!!(window.matchMedia && window.matchMedia("(hover: none)").matches));
+  }, []);
   React.useEffect(() => {
     const vp = vpRef.current;
     if (!vp) return;
-    let raf;
+    let raf, f = 0, mid = null;
+    const touch = noHover;
     const step = () => {
       if (!pause.current) {
         vp.scrollLeft += 1.2;
         const half = vp.scrollWidth / 2;
         if (half > 0 && vp.scrollLeft >= half) vp.scrollLeft -= half;
       }
+      if (touch && f++ % 4 === 0) {
+        const cx = window.innerWidth / 2;
+        let best = null, bestD = Infinity;
+        vp.querySelectorAll(".bts-item").forEach((el) => {
+          const r = el.getBoundingClientRect();
+          const d = Math.abs((r.left + r.right) / 2 - cx);
+          if (d < bestD) {
+            bestD = d;
+            best = el;
+          }
+        });
+        if (best !== mid) {
+          if (mid) mid.classList.remove("mid");
+          if (best) best.classList.add("mid");
+          mid = best;
+        }
+      }
       raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [noHover]);
+  const touchPause = () => {
+    pause.current = true;
+  };
+  const touchResume = () => {
+    setTimeout(() => {
+      pause.current = false;
+    }, 1500);
+  };
   const items = [...WF.bts, ...WF.bts];
   return /* @__PURE__ */ React.createElement("section", { id: "bts", style: { paddingTop: "clamp(50px,7vw,110px)", paddingBottom: "clamp(46px,6vw,90px)", overflow: "hidden", borderTop: "1px solid var(--line-light)" } }, /* @__PURE__ */ React.createElement("style", null, `
-        .bts-vp{overflow:hidden;width:100%;}
+        .bts-vp{overflow-x:auto;overflow-y:hidden;width:100%;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+        .bts-vp::-webkit-scrollbar{display:none;}
         .bts-track{display:flex;align-items:flex-end;gap:clamp(12px,1.6vw,22px);height:clamp(360px,54vh,580px);width:max-content;}
-        .bts-item{flex:0 0 auto;position:relative;overflow:hidden;cursor:pointer;width:clamp(190px,20vw,300px);
+        .bts-item{flex:0 0 auto;position:relative;overflow:hidden;width:clamp(190px,20vw,300px);
           box-shadow:inset 0 0 0 1px rgba(244,241,232,.32);
           transition:width .6s cubic-bezier(.2,.7,.2,1),height .6s cubic-bezier(.2,.7,.2,1);}
         .bts-item img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) brightness(.96) contrast(1.04);transition:filter .6s;}
-        .bts-item:hover{width:clamp(420px,50vw,760px) !important;height:clamp(360px,54vh,580px) !important;z-index:3;}
-        .bts-item:hover img{filter:none;}
+        .bts-item.mid img{filter:none;}
+        @media(hover:hover){
+          .bts-item{cursor:pointer;}
+          .bts-item:hover{width:clamp(420px,50vw,760px) !important;height:clamp(360px,54vh,580px) !important;z-index:3;}
+          .bts-item:hover img{filter:none;}
+          .bts-item:hover .bts-cap{opacity:1;}
+        }
         .bts-idx{position:absolute;top:10px;left:10px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--paper);text-shadow:0 1px 6px #000;z-index:2;}
         .bts-cap{position:absolute;left:10px;bottom:10px;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:var(--paper);text-transform:uppercase;text-shadow:0 1px 6px #000;opacity:0;transition:.4s;white-space:nowrap;z-index:2;}
-        .bts-item:hover .bts-cap{opacity:1;}
+        .bts-item.mid .bts-cap{opacity:1;}
       `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24, marginBottom: "clamp(22px,3vw,44px)" } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "kicker", style: { marginBottom: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "n" }, "[ 04 ]"), " On-set supervision"), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(34px,5.4vw,92px)", lineHeight: 0.9 } }, "ON THE ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "DAY"), ".")), /* @__PURE__ */ React.createElement("p", { style: { fontSize: "clamp(15px,1.15vw,18px)", lineHeight: 1.5, color: "var(--mut-light)", maxWidth: "40ch", paddingBottom: 8 } }, "We’re on set as VFX supervisors — capturing reference & data and checking, frame by frame, that what’s shot will actually hold up in post."))), /* @__PURE__ */ React.createElement(
     "div",
     {
@@ -1058,15 +1138,22 @@ function BTS() {
       onMouseLeave: () => {
         pause.current = false;
       },
+      onTouchStart: touchPause,
+      onTouchEnd: touchResume,
+      onTouchCancel: touchResume,
       style: { paddingLeft: "var(--pad)" }
     },
-    /* @__PURE__ */ React.createElement("div", { className: "bts-track" }, items.map((b, i) => /* @__PURE__ */ React.createElement("div", { className: "bts-item", key: i, onClick: () => window.openModal({ client: b[3], cat: "On set", year: "2025", hero: b[0] }), style: { height: `calc(${b[1]} * clamp(360px,54vh,580px))` } }, /* @__PURE__ */ React.createElement("span", { className: "bts-idx" }, b[2]), /* @__PURE__ */ React.createElement("img", { src: b[0], alt: b[3], loading: "lazy", decoding: "async" }), /* @__PURE__ */ React.createElement("span", { className: "bts-cap" }, b[3]))))
+    /* @__PURE__ */ React.createElement("div", { className: "bts-track" }, items.map((b, i) => /* @__PURE__ */ React.createElement("div", { className: "bts-item", key: i, style: { height: `calc(${b[1]} * clamp(360px,54vh,580px))` } }, /* @__PURE__ */ React.createElement("span", { className: "bts-idx" }, b[2]), /* @__PURE__ */ React.createElement("img", { src: b[0], alt: b[3], loading: "lazy", decoding: "async" }), /* @__PURE__ */ React.createElement("span", { className: "bts-cap" }, b[3]))))
   ));
 }
 function RnD() {
   const exps = WF.rnd;
   const order = [0, 1, 2, 3, 0, 1];
   const [sel, setSel] = React.useState(0);
+  const [noHover, setNoHover] = React.useState(false);
+  React.useEffect(() => {
+    setNoHover(!!(window.matchMedia && window.matchMedia("(hover: none)").matches));
+  }, []);
   const bg = WF.vid(sel).poster;
   const prevRef = React.useRef(bg);
   const prev = prevRef.current;
@@ -1101,10 +1188,13 @@ function RnD() {
           letter-spacing:-.01em;color:var(--paper);text-transform:uppercase;white-space:nowrap;}
         .ah-txt.red span{color:var(--red);}
         @media(max-width:680px){.ah-strip{height:auto;}.ah-row{position:static;flex-direction:column;}
-          .ah-col{height:64px;border-left:none;border-top:1px solid rgba(244,239,225,.22);}
-          .ah-col.open{height:300px;flex-grow:0;} .ah-bg{display:none;}
-          .ah-col:not(.open) .ah-img{opacity:.5;} .ah-txt span{writing-mode:horizontal-tb;transform:none;}}
-      `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { className: "ah-head" }, /* @__PURE__ */ React.createElement("span", null, "[ 07 ] After hours — self-initiated"), /* @__PURE__ */ React.createElement("span", null, "Made for the love of the craft")), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(48px,12vw,210px)", lineHeight: 0.82, marginTop: "clamp(8px,1.2vw,16px)" } }, "AFTER ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "HOURS.")), /* @__PURE__ */ React.createElement("p", { style: { marginTop: "clamp(10px,1.5vw,18px)", fontWeight: 700, fontSize: "clamp(16px,1.9vw,28px)", letterSpacing: "-.01em" } }, "No brief. No client. ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "Just because.")), /* @__PURE__ */ React.createElement("div", { className: "ah-strip" }, /* @__PURE__ */ React.createElement("img", { className: "ah-bg", src: prev, alt: "", "aria-hidden": "true", decoding: "async" }), /* @__PURE__ */ React.createElement("img", { key: bg, className: "ah-bg", src: bg, alt: "", "aria-hidden": "true", decoding: "async", style: { animation: "ahbg .8s ease" } }), /* @__PURE__ */ React.createElement("div", { className: "ah-row" }, order.map((e, idx) => /* @__PURE__ */ React.createElement("div", { key: idx, className: "ah-col exp" + (idx === sel ? " open" : ""), onMouseEnter: () => setSel(idx), onClick: () => open(e) }, /* @__PURE__ */ React.createElement(VideoMedia, { className: "ah-img", active: idx === sel, src: WF.vid(idx).src, poster: WF.vid(idx).poster }))))), /* @__PURE__ */ React.createElement("div", { className: "mono", style: { display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 10, marginTop: 14, fontSize: 11, letterSpacing: ".14em", color: "var(--mut-dark)", textTransform: "uppercase" } }, /* @__PURE__ */ React.createElement("span", null, "Hover to peek · click to open"), /* @__PURE__ */ React.createElement("span", null, "[ no brief · no client ]"), /* @__PURE__ */ React.createElement("span", null, "51.50°N · 0.12°W"))));
+          .ah-col{flex:0 0 auto;height:84px;border-left:none;border-top:1px solid rgba(244,239,225,.22);}
+          .ah-col.open{flex:0 0 auto;height:clamp(260px,70vw,340px);} .ah-bg{display:none;}
+          .ah-col:not(.open) .ah-img{opacity:.55;} .ah-txt span{writing-mode:horizontal-tb;transform:none;}}
+      `), /* @__PURE__ */ React.createElement("div", { className: "wrap" }, /* @__PURE__ */ React.createElement("div", { className: "ah-head" }, /* @__PURE__ */ React.createElement("span", null, "[ 07 ] After hours — self-initiated"), /* @__PURE__ */ React.createElement("span", null, "Made for the love of the craft")), /* @__PURE__ */ React.createElement("h2", { className: "display", style: { fontSize: "clamp(48px,12vw,210px)", lineHeight: 0.82, marginTop: "clamp(8px,1.2vw,16px)" } }, "AFTER ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "HOURS.")), /* @__PURE__ */ React.createElement("p", { style: { marginTop: "clamp(10px,1.5vw,18px)", fontWeight: 700, fontSize: "clamp(16px,1.9vw,28px)", letterSpacing: "-.01em" } }, "No brief. No client. ", /* @__PURE__ */ React.createElement("span", { className: "red" }, "Just because.")), /* @__PURE__ */ React.createElement("div", { className: "ah-strip" }, /* @__PURE__ */ React.createElement("img", { className: "ah-bg", src: prev, alt: "", "aria-hidden": "true", decoding: "async" }), /* @__PURE__ */ React.createElement("img", { key: bg, className: "ah-bg", src: bg, alt: "", "aria-hidden": "true", decoding: "async", style: { animation: "ahbg .8s ease" } }), /* @__PURE__ */ React.createElement("div", { className: "ah-row" }, order.map((e, idx) => /* @__PURE__ */ React.createElement("div", { key: idx, className: "ah-col exp" + (idx === sel ? " open" : ""), onMouseEnter: () => setSel(idx), onClick: () => {
+    if (noHover) setSel(idx);
+    else open(e);
+  } }, /* @__PURE__ */ React.createElement(VideoMedia, { className: "ah-img", active: idx === sel, src: WF.vid(idx).src, poster: WF.vid(idx).poster }))))), /* @__PURE__ */ React.createElement("div", { className: "mono", style: { display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 10, marginTop: 14, fontSize: 11, letterSpacing: ".14em", color: "var(--mut-dark)", textTransform: "uppercase" } }, /* @__PURE__ */ React.createElement("span", null, noHover ? "Tap to expand" : "Hover to peek · click to open"), /* @__PURE__ */ React.createElement("span", null, "[ no brief · no client ]"), /* @__PURE__ */ React.createElement("span", null, "51.50°N · 0.12°W"))));
 }
 function Gallery() {
   const pool = [...WF.gallery, ...WF.gallery];
